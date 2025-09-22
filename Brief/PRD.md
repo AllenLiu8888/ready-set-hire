@@ -5,8 +5,8 @@ ReadySetHire 是 COMP2140/7240 React Web 标准项目，占 React Web Assessment
 
 2. 技术栈与 UI 规范
 - 前端框架：React 19 + Vite，使用模块化路由与受控组件。
-- 样式系统：TailwindCSS 结合 DaisyUI 主题组件（Navbar、Card、Drawer、Badge 等），保证统一的色彩与暗/亮模式支持。
-- 组件库：在保留 DaisyUI 主体的基础上挑选常用 Mantine 组件（如 `@mantine/core` 的 `Modal`、`Drawer`、`Tabs`、`Notifications`），用于交互密集的场景；Mantine 使用需与 DaisyUI 风格调和。
+- 样式系统：TailwindCSS v4.1，按官方最新写法在 `tailwind.config.js` 中声明 `content` 范围，并通过 `plugins: [daisyui]` 集成 DaisyUI；样式入口使用 `@import 'tailwindcss';` 与 `@plugin` 语法组织自定义工具类。
+- 组件库：DaisyUI v5.1.14 提供视觉基座（Navbar、Card、Drawer、Badge 等），通过 `data-theme` 或 `theme` 配置统一暗/亮风格；Mantine v8.3.0 用于高交互场景（`MantineProvider`、`Modal`、`Drawer`、`Tabs`、`Notifications` 等），保持 CSS reset 兼容并在顶层用 `MantineProvider defaultColorScheme="light"` 包裹。
 - 代码规范：遵循 SOLID、DRY、KISS、可读性原则；以函数式组件 + Hooks 为主，所有 API 调用统一通过服务层。
 - 必读文档：所有开发前须复核 `Brief/brief.md`、`Brief/rubric.md`、`Brief/RESTFul.md` 及本 PRD，任何功能变更需同步更新文档。
 
@@ -15,34 +15,55 @@ ReadySetHire 是 COMP2140/7240 React Web 标准项目，占 React Web Assessment
 - 主导航分为 Dashboard、Interviews、Questions、Applicants 四大入口；候选人使用 `/take/:applicantId` 独立路由。
 - 支持 404 和空态页面，提供返回首页操作。
 
-4. 核心功能需求
+4. 核心功能需求与页面实现计划
 4.1 Dashboard
-- 以 DaisyUI 卡片展示关键模块入口、待办提醒与统计摘要（面试数、待处理候选人等）。
-- 提供快速链接到 Interviews/Questions/Applicants，并展示 GenAI 功能入口。
+- 功能要求：以 DaisyUI 卡片展示关键模块入口、待办提醒与统计摘要（面试数、待处理候选人等），提供快速链接及 GenAI 功能入口。
+- 实现计划：
+  1. 阶段一交付纯静态页面：卡片、导航按钮、占位统计组件，确保布局在移动/桌面端自适应。
+  2. 阶段二接入 API 摘要（面试总数、待处理候选人），引入 Skeleton/Spinner 状态。
+  3. 阶段四整合 GenAI 概要入口按钮，触发 Applicants 页面侧边面板。
 
 4.2 面试管理（Interviews）
-- 列表页显示标题、职位、状态、问题数量、候选人数量及状态分布，支持刷新与错误/空状态提示。
-- Add/Edit 复用表单组件，校验必填项（title、job_role、description、status），默认 Draft；提交后返回列表并 toast 提示。
-- 支持删除确认对话框（Mantine Modal），操作前校验关联数据提示。
+- 功能要求：列表页显示标题、职位、状态、问题数量、候选人数量及状态分布；提供刷新、创建、编辑、删除及跳转；表单校验必填项并默认 Draft；删除需确认。
+- 实现计划：
+  1. 阶段一建立路由页骨架，包含 DaisyUI Table/Card 占位、`Create Interview` 按钮。
+  2. 阶段二接入 `useInterviewList` 查询：实现加载/空/错误态、手动刷新按钮、统计徽章。
+  3. 阶段二新增 Mantine Modal 表单组件：表单字段、校验、成功 toast、关闭后刷新列表。
+  4. 阶段二补充编辑功能（路由 `/interviews/:id/edit` 或 Modal，单次提交围绕编辑页），删除确认对话框及 API 错误提示。
+  5. 阶段二末尾添加跳转按钮至 Questions/Applicants（携带 interviewId 过滤）。
 
 4.3 题库管理（Questions）
-- 卡片或表格展示题干、所属面试、难度标签；可按面试筛选、刷新、处理空态。
-- 表单校验题干、难度、面试必选；难度使用 DaisyUI Button Group 或 Mantine SegmentedControl。
-- 删除操作需确认并提供错误反馈。
+- 功能要求：卡片或表格展示题干、所属面试、难度标签；可按面试筛选、刷新、空态提示；表单校验题干、难度、面试；删除需确认。
+- 实现计划：
+  1. 阶段一输出静态页面与筛选控件（Mantine Select 占位，DaisyUI Badge 展示难度）。
+  2. 阶段二实现 `useQuestionList`：根据选择的 Interview 过滤，提供刷新与错误提示。
+  3. 阶段二创建表单组件，包含难度 SegmentedControl（Easy/Intermediate/Advanced），提交后归位。
+  4. 阶段二添加编辑路由/Modal，与创建表单复用；实现删除确认（Mantine Modal），支持 API 错误上屏。
 
 4.4 候选人管理（Applicants）
-- 列表展示候选人姓名、联系方式、状态徽章、所属面试、唯一邀请链接（可复制）。
-- Add/Edit 表单包含 Title、Firstname、Surname、Phone、Email、Interview、Status；创建成功后生成 `/take/:applicantId` 链接。
-- 列表提供手动触发 GenAI 摘要及查看回答的入口。
+- 功能要求：列表展示候选人姓名、联系方式、状态徽章、所属面试、唯一邀请链接（可复制）；表单包含 Title、Firstname、Surname、Phone、Email、Interview、Status；生成 `/take/:applicantId` 链接；支持 GenAI 摘要和回答查看。
+- 实现计划：
+  1. 阶段一搭建静态列表与筛选控件，包含 DaisyUI Badge、按钮占位、复制链接图标。
+  2. 阶段二实现 `useApplicantList` 数据获取；引入状态分组统计、复制链接功能（使用 `navigator.clipboard.writeText`，提供 Mantine 通知反馈）。
+  3. 阶段二完善表单，创建成功后展示生成的链接（Mantine CopyButton），编辑沿用同组件。
+  4. 阶段三/四实现查看回答侧 panel（与 GenAI 面板区分）：载入 applicant answers、支持加载/错误态。
+  5. 阶段四引入 GenAI 摘要按钮，打开 Mantine Drawer/Modal 展示生成内容（含刷新、无 Key 文案）。
 
 4.5 候选人答题流程（Take Interview）
-- 欢迎页显示候选人信息、面试摘要和操作说明；若数据缺失则展示错误页。
-- 逐题答题流程：每页单题、仅 Next 按钮；必须先录音方可继续，禁止回退。
-- 录音控件支持开始、暂停/恢复、结束，完成后上传并调用转写服务将文本写入 `/applicant_answer`。
-- 所有题目完成后更新候选人状态为 Completed，并展示感谢页及后续指引。
+- 功能要求：欢迎页展示候选人与面试信息；逐题答题流程限制前进；必须录音后才能继续；录音需支持暂停/恢复；提交时写入 `/applicant_answer`，全部完成后更新状态并显示感谢页。
+- 实现计划：
+  1. 阶段一完成 `/take/:applicantId` 路由静态欢迎页（DaisyUI Hero 组件），含开始按钮与错误占位。
+  2. 阶段三接入候选人/题目数据：使用 Loader 或 Suspense 处理加载失败，缺失数据显示错误卡片。
+  3. 阶段三实现单题导航组件：题干展示、进度条、`Next` 按钮禁用逻辑（未录音前禁用）。
+  4. 阶段三集成自定义 `useAudioRecorder` Hook：封装 MediaRecorder，输出录音状态、Blob URL、错误；UI 使用 DaisyUI Button + Mantine Notifications 反馈。
+  5. 阶段三实现提交：将音频 Blob 传入占位转写函数 -> 保存文本到 `/applicant_answer` -> 更新 applicant 状态 -> 进入感谢页；处理 API 错误与重试提示。
 
 4.6 Advanced GenAI
-- 需实现创意 GenAI 功能，建议在 Applicants 列表中提供候选人回答摘要面板，支持加载/错误状态及手动刷新；缺失 API Key 时展示占位提示。
+- 功能要求：创意 GenAI 功能，建议在 Applicants 列表中提供候选人回答摘要面板，支持加载/错误状态及手动刷新；缺失 API Key 时展示占位提示。
+- 实现计划：
+  1. 阶段四创建摘要服务模块：从 `.env.local` 读取密钥，缺失时返回占位结果并在 UI 显示提醒。
+  2. 阶段四在 Applicants 页面引入 Mantine Drawer/Modal 组件显示摘要，提供刷新、关闭、加载 Skeleton、错误警示。
+  3. 阶段四补充 Dashboard 入口卡片，快捷打开对应候选人摘要。
 
 5. 数据模型与 API 契约
 - Interview：字段包括 id、title、job_role、description、status、username（必填）。增删改需附带 JWT 与 username=eq.{studentId} 过滤。
@@ -66,6 +87,7 @@ ReadySetHire 是 COMP2140/7240 React Web 标准项目，占 React Web Assessment
 
 8. 开发策略与里程碑
 - 阶段一：布局与导航骨架
+  - 安装并初始化 React Router（`react-router-dom`），搭建基础路由映射。
   - 落地 AppLayout（Header、Nav、Content、Footer）骨架，并留出主内容占位。
   - 依次实现 Dashboard、Interviews、Questions、Applicants 四个静态页面入口（每次提交集中在单页）。
   - 添加 DaisyUI/Mantine 主题切换设置及 404、空态基础组件，确保导航完整。
@@ -81,6 +103,7 @@ ReadySetHire 是 COMP2140/7240 React Web 标准项目，占 React Web Assessment
 - 阶段四：GenAI 摘要模块
   - 在 Applicants 页加入 GenAI 按钮与侧边面板骨架，先完成 UI。
   - 接入摘要服务，处理加载、错误、无密钥三种场景，并记录在 README/PRD。
+  - Dashboard 卡片提供 GenAI 快捷入口。
 - 阶段五：打磨与交付准备
   - 巡检并统一 Loading/Empty/Error 组件与文案，覆盖主要页面。
   - 规划 Lint/测试策略（如 Vitest 起步或手动测试清单），完善提交前检查流程。

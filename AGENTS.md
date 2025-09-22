@@ -1,5 +1,10 @@
 # Repository Guidelines
 
+## 项目定位与范围
+- 本项目为非商业用途，目标是满足课程 Rubric 要求并交付可演示成果。
+- 对于 Rubric 未要求的冗余安全或防御性逻辑可暂缓，必要时在代码中标注 `TODO`（例如 `TODO: add defensive guard`）。
+- 常规防御性措施仍需保留，如表单必填校验、基础错误处理，以确保用户体验稳定。
+
 ## 必读资料与流程
 - 所有开发或改动前，务必重读 `Brief/brief.md`、`Brief/rubric.md`、`Brief/RESTFul.md` 与 `Brief/PRD.md`，确保实现与评估标准一致。
 - 任何需求假设或范围变更都要先更新 PRD，再进行编码；如果存在不确定性，请先在文档或注释中记录。
@@ -11,9 +16,11 @@
 - `src/server/app.js` 仅作 API 调用范例，不要提交真实凭证。
 
 ## 技术栈与 UI 约束
-- 前端采用 React + Vite + TailwindCSS，默认使用 DaisyUI 组件（Navbar、Card、Drawer、Badge 等）来保证一致视觉。
-- 可引入常用 Mantine 组件（如 `Modal`、`Drawer`、`Tabs`、`Notifications`）处理复杂交互，但需与 DaisyUI 风格统一。
-- 音频录制、单页问答、GenAI 摘要等关键流程必须契合 PRD 与 Rubric 的功能描述。
+- TailwindCSS v4.1：在 `tailwind.config.js` 中维护 `content` 白名单，样式入口使用 `@import 'tailwindcss';`，自定义工具类遵循 v4 的 `@plugin`/`@utility` 写法。
+- DaisyUI v5.1.14：通过 `plugins: [daisyui]` 集成，使用 `data-theme` 或 `theme` 配置切换主题，导航/表单优先采用 DaisyUI 组件。
+- Mantine v8.3.0：在顶层使用 `MantineProvider`（可设 `defaultColorScheme`，并启用 `withGlobalStyles`、`withNormalizeCSS`）包裹需要的交互组件（`Modal`、`Drawer`、`Tabs`、`Notifications` 等），注意与 Tailwind/DaisyUI class 共存。
+- 响应式仅需覆盖桌面端不同宽度下的布局适配；若 Rubric/Brief 无移动端要求，则无需额外实现移动端 UI。
+- React Router：使用 `react-router-dom` 管理页面跳转，按阶段迭代增加路由和懒加载模块。
 
 ## 构建与验证
 - `npm install` 安装依赖；`npm run dev` 启动开发服务器，默认端口 5173。
