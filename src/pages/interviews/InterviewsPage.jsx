@@ -1,5 +1,9 @@
 import { CircleQuestionMark } from 'lucide-react';
+import { RefreshCcw } from 'lucide-react';
 import { Users } from 'lucide-react';
+import { CirclePlus } from 'lucide-react';
+import { SquarePen } from 'lucide-react';
+import { Trash2 } from 'lucide-react';
 
 const Interviews = [
   { id: 1, title: 'Front-end Developer Interview', job_role: 'Senior Front-end Developer', description: 'Interview for candidates with React experience', status: 'Published', questions: 3, applicants: 3, applicants_completed_count: 2, applicants_not_started_count: 1, },
@@ -16,7 +20,7 @@ export default function InterviewsPage() {
     <div className="px-4 sm:px-6 lg:px-8">
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
-          <h1 className="text-3xl font-semibold text-gray-900">Interviews</h1>
+          <h1 className="text-3xl font-semibold text-gray-900">Interviews Management</h1>
           <p className="mt-2 text-base text-gray-700">
             A list of all the interviews in your account including their title, role, description and status.
           </p>
@@ -26,15 +30,19 @@ export default function InterviewsPage() {
             type="button"
             className="rounded-md bg-white px-3 py-2 text-center font-semibold text-gray-900 shadow-xs inset-ring inset-ring-gray-300 hover:bg-gray-200 hover:text-gray-500"
           >
-            Refresh
+            <div className="flex items-center gap-2">
+              <RefreshCcw className="w-4 h-4"/> Refresh
+            </div>
           </button>
           <button
             type="button"
             className="block rounded-md bg-slate-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-xs hover:bg-slate-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           >
-            Add Interview
+            <div className="flex items-center gap-2">
+              <CirclePlus className="w-4 h-4"/>  Add Interview
+            </div>
           </button>
-        </div>
+        </div>  
       </div>
       <div className="mt-8 flow-root">
         <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -58,7 +66,7 @@ export default function InterviewsPage() {
                     <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                       Applicants
                     </th>
-                    <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">
+                    <th scope="col" className="px-3 py-3.5 text-center text-sm font-semibold text-gray-900">
                       Actions
                     </th>
                   </tr>
@@ -66,35 +74,40 @@ export default function InterviewsPage() {
                 <tbody className="divide-y divide-gray-200 bg-white">
                   {Interviews.map((Interview) => (
                     <tr key={Interview.id}>    
-                      <td className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-6">
+                      <td className="py-4 px-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-6">
                         {Interview.title}
                       </td>
                       <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">{Interview.job_role}</td>
                       <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">{Interview.status}</td>
                       <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500 ">
                         <div className="flex items-center gap-2">
-                          <CircleQuestionMark className="w-5 h-5"/> {Interview.questions} Questions  
+                          <CircleQuestionMark className="w-4 h-4"/> {Interview.questions} Questions  
                         </div>
                       </td>
                       <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500"> 
                         <div className="flex items-center gap-2">
-                          <Users className="w-5 h-5"/> 
+                          <Users className="w-4 h-4"/> 
                           {Interview.applicants}
                           <span className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-400 insering-ring inset-ring-blue-700/10">{Interview.applicants_completed_count} Completed</span>
                           <span className="inline-flex items-center rounded-md bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-600 insering-ring inset-ring-yellow-700/10">{Interview.applicants_not_started_count} Pending</span>
                         </div>
-                        </td>
-                      <td className="py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-6">
-                      <button
-                        type="button"
-                        className="rounded-sm bg-zinc-50 px-2 py-1 text-sm font-semibold text-zinc-600 shadow-xs hover:bg-zinc-100 mr-3">
-                        Edit
-                      </button>
-                      <button
-                        type="button"
-                        className="rounded-sm bg-red-50 px-2 py-1 text-sm font-semibold text-red-600 shadow-xs hover:bg-red-100">
-                        Delete
-                      </button>
+                      </td>
+                      <td className="py-4 px-3 text-center text-sm font-medium whitespace-nowrap">
+                        <button
+                          type="button"
+                          className="rounded-sm bg-blue-50 px-2 py-1 text-sm font-semibold text-blue-400 shadow-xs hover:bg-blue-100 mr-2">
+                            <div className='flex items-center gap-2'>
+                              <SquarePen className="w-4 h-4"/>
+                            </div>
+                          
+                        </button>
+                        <button
+                          type="button"
+                          className="rounded-sm bg-red-50 px-2 py-1 text-sm font-semibold text-red-600 shadow-xs hover:bg-red-100">
+                          <div className='flex items-center gap-2'>
+                            <Trash2 className="w-4 h-4"/>
+                          </div>
+                        </button>
                       </td>
                     </tr>
                   ))}
