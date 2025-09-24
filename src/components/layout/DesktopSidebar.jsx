@@ -1,16 +1,18 @@
 import { NavLink } from 'react-router-dom'
 
-function DesktopSidebar({ navigation, teams, logoSrc, profile }) {
+// Desktop-only sidebar: shows brand, primary navigation, and a fixed profile link.
+// 桌面侧边栏：展示品牌、主导航与固定的个人入口。
+function DesktopSidebar({ navigation, logoSrc, profile }) {
   return (
-    <div className="hidden bg-gray-900 lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
+    <div className="fixed inset-y-0 z-50 flex w-72 flex-col bg-neutral-700">
       <div className="flex grow flex-col gap-y-5 overflow-y-auto px-6">
         <div className="flex h-16 shrink-0 items-center">
-          <img alt={profile?.companyAlt ?? 'Your Company'} src={logoSrc} className="h-8 w-auto" />
+          <img alt={profile?.companyAlt ?? 'Your Company'} src={logoSrc} className="pt-2 h-8 w-auto" />
         </div>
         <nav className="flex flex-1 flex-col">
           <ul role="list" className="flex flex-1 flex-col gap-y-7">
             <li>
-              <ul role="list" className="-mx-2 space-y-1">
+              <ul role="list" className="-mx-2 space-y-4">
                 {navigation.map((item) => (
                   <li key={item.name}>
                     <NavLink
@@ -40,26 +42,8 @@ function DesktopSidebar({ navigation, teams, logoSrc, profile }) {
                 ))}
               </ul>
             </li>
-            {teams?.length ? (
-              <li>
-                <div className="text-xs/6 font-semibold text-gray-400">Your teams</div>
-                <ul role="list" className="-mx-2 mt-2 space-y-1">
-                  {teams.map((team) => (
-                    <li key={team.name}>
-                      <a
-                        href={team.href}
-                        className="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-gray-400 hover:bg-white/5 hover:text-white"
-                      >
-                        <span className="flex size-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-gray-800 text-[0.625rem] font-medium text-gray-400 group-hover:text-white">
-                          {team.initial}
-                        </span>
-                        <span className="truncate">{team.name}</span>
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </li>
-            ) : null}
+            {/* Removed teams section for desktop-only simplified layout */}
+            {/* 已移除 teams 区域，聚焦主导航 */}
             <li className="-mx-6 mt-auto">
               <a
                 href={profile?.href ?? '#'}
