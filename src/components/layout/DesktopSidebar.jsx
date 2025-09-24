@@ -12,7 +12,7 @@ function DesktopSidebar({ navigation, logoSrc, profile }) {
         <nav className="flex flex-1 flex-col">
           <ul role="list" className="flex flex-1 flex-col gap-y-7">
             <li>
-              <ul role="list" className="-mx-2 space-y-4">
+              <ul role="list" className="-mx-2 space-y-2">
                 {navigation.map((item) => (
                   <li key={item.name}>
                     <NavLink

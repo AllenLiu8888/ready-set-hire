@@ -1,10 +1,14 @@
-const people = [
-  { id: 1, title: 'Front-end Developer Interview', role: 'Senior Front-end Developer', description: 'Interview for candidates with React experience', status: 'Published',},
-  { id: 2, title: 'Designer Interview', role: 'Junior Designer', description: 'Interview for candidates with design experience', status: 'Published',  },
-  { id: 3, title: 'Director of Product', role: 'Director of Product', description: 'Interview for candidates with product experience', status: 'Draft',  },
-  { id: 4, title: 'Copywriter Interview', role: 'Copywriter', description: 'Interview for candidates with copywriting experience', status: 'Archived',  },
-  { id: 5, title: 'Senior Designer Interview', role: 'Senior Designer', description: 'Interview for candidates with design experience', status: 'Published',  },
-  { id: 6, title: 'Principal Designer Interview', role: 'Principal Designer', description: 'Interview for candidates with design experience', status: 'Published',  },
+import { CircleQuestionMark } from 'lucide-react';
+import { Users } from 'lucide-react';
+
+const Interviews = [
+  { id: 1, title: 'Front-end Developer Interview', job_role: 'Senior Front-end Developer', description: 'Interview for candidates with React experience', status: 'Published', questions: 3, applicants: 3, applicants_completed_count: 2, applicants_not_started_count: 1, },
+  { id: 2, title: 'Designer Interview', job_role: 'Junior Designer', description: 'Interview for candidates with design experience', status: 'Published', questions: 4, applicants: 7, applicants_completed_count: 4, applicants_not_started_count: 3, },
+  { id: 2, title: 'Designer Interview', job_role: 'Junior Designer', description: 'Interview for candidates with design experience', status: 'Published', questions: 4, applicants: 9, applicants_completed_count: 6, applicants_not_started_count: 3, },
+  { id: 3, title: 'Director of Product', job_role: 'Director of Product', description: 'Interview for candidates with product experience', status: 'Draft', questions: 5, applicants: 10, applicants_completed_count: 8, applicants_not_started_count: 2, },
+  { id: 4, title: 'Copywriter Interview', job_role: 'Copywriter', description: 'Interview for candidates with copywriting experience', status: 'Archived', questions: 6, applicants: 100, applicants_completed_count: 98, applicants_not_started_count: 2, },
+  { id: 5, title: 'Senior Designer Interview', job_role: 'Senior Designer', description: 'Interview for candidates with design experience', status: 'Published', questions: 7, applicants: 100, applicants_completed_count: 99, applicants_not_started_count: 1, },
+  { id: 6, title: 'Principal Designer Interview', job_role: 'Principal Designer', description: 'Interview for candidates with design experience', status: 'Published', questions: 8, applicants: 100, applicants_completed_count: 99, applicants_not_started_count: 1, },
 ]
 
 export default function InterviewsPage() {
@@ -43,28 +47,43 @@ export default function InterviewsPage() {
                       Title
                     </th>
                     <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                      Role
-                    </th>
-                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                      Description
+                      Role Job
                     </th>
                     <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                       Status
                     </th>
-                    <th scope="col" className="py-3.5 pr-4 pl-3 sm:pr-6">
-                      <span className="sr-only">Edit</span>
+                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                      Questions
+                    </th>
+                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                      Applicants
+                    </th>
+                    <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">
+                      Actions
                     </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
-                  {people.map((person) => (
-                    <tr key={person.id}>
+                  {Interviews.map((Interview) => (
+                    <tr key={Interview.id}>    
                       <td className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-6">
-                        {person.title}
+                        {Interview.title}
                       </td>
-                      <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">{person.role}</td>
-                      <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">{person.description}</td>
-                      <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">{person.status}</td>
+                      <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">{Interview.job_role}</td>
+                      <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">{Interview.status}</td>
+                      <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500 ">
+                        <div className="flex items-center gap-2">
+                          <CircleQuestionMark className="w-5 h-5"/> {Interview.questions} Questions  
+                        </div>
+                      </td>
+                      <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500"> 
+                        <div className="flex items-center gap-2">
+                          <Users className="w-5 h-5"/> 
+                          {Interview.applicants}
+                          <span className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-400 insering-ring inset-ring-blue-700/10">{Interview.applicants_completed_count} Completed</span>
+                          <span className="inline-flex items-center rounded-md bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-600 insering-ring inset-ring-yellow-700/10">{Interview.applicants_not_started_count} Pending</span>
+                        </div>
+                        </td>
                       <td className="py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-6">
                       <button
                         type="button"
