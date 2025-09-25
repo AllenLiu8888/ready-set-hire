@@ -4,6 +4,7 @@ import { RefreshCcw } from 'lucide-react';
 import { SquarePen } from 'lucide-react';
 import { Trash2 } from 'lucide-react';
 import { Link } from 'lucide-react';
+
 const ApplicantsStatus = tv({
   base: 'inline-flex items-center rounded-md px-2 py-1 text-xs font-medium',
   variants: {

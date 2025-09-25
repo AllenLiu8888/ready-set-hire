@@ -4,6 +4,28 @@ import { Users } from 'lucide-react';
 import { CirclePlus } from 'lucide-react';
 import { SquarePen } from 'lucide-react';
 import { Trash2 } from 'lucide-react';
+import { tv } from 'tailwind-variants';
+
+const InterviewStatus = tv({
+  base: 'inline-flex items-center rounded-md px-2 py-1 text-xs font-medium',
+  variants: {
+    status: {
+      'Published': 'bg-green-50 text-green-600',
+      'Draft': 'bg-yellow-50 text-yellow-600',
+      'Archived': 'bg-red-50 text-red-600',
+    },
+  },
+})
+
+const ApplicantsStatus = tv({
+  base: 'inline-flex items-center rounded-md px-2 py-1 text-xs font-medium',
+  variants: {
+    status: {
+      'Not Started': 'bg-yellow-50 text-yellow-600 insering-ring inset-ring-yellow-700/10',
+      'Completed': 'bg-blue-50 text-blue-400 insering-ring inset-ring-blue-700/10',
+    },
+  },
+})
 
 const Interviews = [
   { id: 1, title: 'Front-end Developer Interview', job_role: 'Senior Front-end Developer', description: 'Interview for candidates with React experience', status: 'Published', questions: 3, applicants: 3, applicants_completed_count: 2, applicants_not_started_count: 1, },
@@ -78,7 +100,9 @@ export default function InterviewsPage() {
                         {Interview.title}
                       </td>
                       <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">{Interview.job_role}</td>
-                      <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">{Interview.status}</td>
+                      <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
+                        <span className={InterviewStatus({ status: Interview.status })}>{Interview.status}</span>
+                      </td>
                       <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500 ">
                         <div className="flex items-center gap-2">
                           <CircleQuestionMark className="w-4 h-4"/> {Interview.questions} Questions  
@@ -88,8 +112,8 @@ export default function InterviewsPage() {
                         <div className="flex items-center gap-2">
                           <Users className="w-4 h-4"/> 
                           {Interview.applicants}
-                          <span className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-400 insering-ring inset-ring-blue-700/10">{Interview.applicants_completed_count} Completed</span>
-                          <span className="inline-flex items-center rounded-md bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-600 insering-ring inset-ring-yellow-700/10">{Interview.applicants_not_started_count} Pending</span>
+                          <span className={ApplicantsStatus({ status: 'Completed' })}>{Interview.applicants_completed_count} Completed</span>
+                          <span className={ApplicantsStatus({ status: 'Not Started' })}>{Interview.applicants_not_started_count} Pending</span>
                         </div>
                       </td>
                       <td className="py-4 px-3 text-center text-sm font-medium whitespace-nowrap">
