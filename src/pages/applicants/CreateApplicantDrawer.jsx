@@ -91,8 +91,7 @@ export default function CreateApplicantDrawer({ onApplicantCreated }) {
 
     // Basic validation - ensure required fields are filled
     // CN: 基础验证 - 确保必填字段已填写
-    if (!formData.title.trim() || !formData.firstname.trim() || !formData.surname.trim() || 
-        !formData.phone_number.trim() || !formData.email_address.trim() || !formData.interview_id) {
+    if (!formData.title.trim() || !formData.firstname.trim() || !formData.surname.trim() || !formData.email_address.trim() || !formData.interview_id) {
       alert('Please fill in all required fields: Title, First Name, Last Name, Phone Number, Email Address, and Interview')
       return
     }

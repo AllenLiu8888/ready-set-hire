@@ -117,7 +117,7 @@ const DashboardPage = () => {
 
   // Get recent activities (last items from each category)
   // CN: 获取最近活动（每个类别的最后几个项目）
-  const recentInterviews = interviews.slice(0, 3)
+  const recentInterviews = interviews.slice(0, 5)
   const recentApplicants = applicants.slice(0, 5)
 
   // Loading state

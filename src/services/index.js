@@ -44,3 +44,12 @@ export {
   updateApplicantAnswer,
   deleteApplicantAnswer
 } from './applicantAnswerService.js'
+
+// Export AI services
+// CN: 导出AI服务
+export {
+  generateInterviewQuestions,
+  generateAndCreateQuestions,
+  isAIQuestionGenerationAvailable,
+  getAIConfigStatus
+} from './aiQuestionService.js'

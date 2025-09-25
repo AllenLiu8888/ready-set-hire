@@ -5,10 +5,11 @@ import EditInterviewDrawer from './EditInterviewDrawer.jsx';
 import CreateInterviewDrawer from './CreateInterviewDrawer.jsx';
 import ConfirmAlert from '../../components/shared/alerts/ConfirmAlert.jsx';
 import SuccessAlert from '../../components/shared/alerts/SuccessAlert.jsx';
+import { AIQuestionGeneratorCompact } from '../../components/ai/AIQuestionGenerator.jsx';
 
 // Import API services
 // CN: 导入 API 服务
-import { getInterviews, deleteInterview } from '../../services';
+import { getInterviews, deleteInterview, getQuestions, getApplicants } from '../../services';
 import { storeInterviews } from '../../utils/interviewUtils';
 
 
@@ -38,6 +39,8 @@ export default function InterviewsPage() {
   // State management for interviews data and UI states
   // CN: 面试数据和 UI 状态的状态管理
   const [interviews, setInterviews] = useState([]) // Store interviews list / CN: 存储面试列表
+  const [questions, setQuestions] = useState([]) // Store questions list / CN: 存储题目列表
+  const [applicants, setApplicants] = useState([]) // Store applicants list / CN: 存储候选人列表
   const [loading, setLoading] = useState(true) // Loading state / CN: 加载状态
   const [error, setError] = useState(null) // Error state / CN: 错误状态
   
@@ -51,29 +54,40 @@ export default function InterviewsPage() {
   const [successMessage, setSuccessMessage] = useState('') // Success message content / CN: 成功消息内容
   const [showSuccess, setShowSuccess] = useState(false) // Control success alert visibility / CN: 控制成功提醒的可见性
 
-  // Function to fetch interviews from API
-  // CN: 从 API 获取面试数据的函数
+  // Function to fetch all data from API
+  // CN: 从 API 获取所有数据的函数
   const fetchInterviews = async () => {
     try {
       setLoading(true) // Start loading / CN: 开始加载
       setError(null) // Clear previous errors / CN: 清除之前的错误
       
-      // Call API service to get interviews
-      // CN: 调用 API 服务获取面试数据
-      const data = await getInterviews()
+      console.log('📊 Fetching interviews, questions, and applicants data...')
+      
+      // Fetch all data in parallel for better performance
+      // CN: 并行获取所有数据以提高性能
+      const [interviewsData, questionsData, applicantsData] = await Promise.all([
+        getInterviews(),
+        getQuestions(),
+        getApplicants()
+      ])
       
       // Update state with fetched data
       // CN: 用获取的数据更新状态
-      setInterviews(data)
+      setInterviews(interviewsData)
+      setQuestions(questionsData)
+      setApplicants(applicantsData)
       
       // Store interviews in localStorage for other components to use
       // CN: 将面试数据存储到localStorage供其他组件使用
-      storeInterviews(data)
+      storeInterviews(interviewsData)
+      
+      console.log('✅ All data loaded successfully')
+      
     } catch (err) {
       // Handle errors
       // CN: 处理错误
-      console.error('Failed to fetch interviews:', err)
-      setError('Failed to load interviews. Please try again.')
+      console.error('Failed to fetch data:', err)
+      setError('Failed to load data. Please try again.')
     } finally {
       // Always stop loading regardless of success/failure
       // CN: 无论成功或失败都停止加载
@@ -155,6 +169,23 @@ export default function InterviewsPage() {
   const handleCloseConfirm = () => {
     setShowConfirm(false)
     setInterviewToDelete(null)
+  }
+
+  // Function to calculate questions count for an interview
+  // CN: 计算面试题目数量的函数
+  const getQuestionsCount = (interviewId) => {
+    return questions.filter(q => q.interview_id === interviewId).length
+  }
+
+  // Function to calculate applicants count and status for an interview
+  // CN: 计算面试候选人数量和状态的函数
+  const getApplicantsStats = (interviewId) => {
+    const interviewApplicants = applicants.filter(a => a.interview_id === interviewId)
+    const total = interviewApplicants.length
+    const completed = interviewApplicants.filter(a => a.interview_status === 'Completed').length
+    const pending = interviewApplicants.filter(a => a.interview_status === 'Not Started').length
+    
+    return { total, completed, pending }
   }
 
   // Function to show success notification
@@ -301,35 +332,58 @@ export default function InterviewsPage() {
                         <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500 ">
                           <div className="flex items-center gap-2">
                             <CircleQuestionMark className="w-4 h-4"/> 
-                            {/* TODO: Add questions count from API / CN: TODO: 从 API 添加题目数量 */}
-                            0 Questions  
+                            {getQuestionsCount(interview.id)} Questions  
                           </div>
                         </td>
                         <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500"> 
                           <div className="flex items-center gap-2">
                             <Users className="w-4 h-4"/> 
-                            {/* TODO: Add applicants count from API / CN: TODO: 从 API 添加候选人数量 */}
-                            0 Applicants
-                            <span className={ApplicantsStatus({ status: 'Completed' })}>0 Completed</span>
-                            <span className={ApplicantsStatus({ status: 'Not Started' })}>0 Pending</span>
+                            {(() => {
+                              const stats = getApplicantsStats(interview.id)
+                              return (
+                                <>
+                                  {stats.total} Applicants
+                                  {stats.total > 0 && (
+                                    <>
+                                      <span className={ApplicantsStatus({ status: 'Completed' })}>{stats.completed} Completed</span>
+                                      <span className={ApplicantsStatus({ status: 'Not Started' })}>{stats.pending} Pending</span>
+                                    </>
+                                  )}
+                                </>
+                              )
+                            })()}
                           </div>
                         </td>
                         <td className="py-4 px-3 text-center text-sm font-medium whitespace-nowrap">
-                          {/* Pass interview data to edit drawer / CN: 传递面试数据给编辑抽屉 */}
-                          <EditInterviewDrawer 
-                            interview={interview} 
-                            onInterviewUpdated={handleInterviewUpdated}
-                          />
-                          {/* Delete button / CN: 删除按钮 */}
-                          <button
-                            type="button"
-                            onClick={() => handleDeleteClick(interview)} // Use new click handler / CN: 使用新的点击处理器
-                            className="rounded-sm bg-red-50 px-2 py-1 text-sm font-semibold text-red-600 shadow-xs hover:bg-red-100 ml-2"
-                          >
-                            <div className='flex items-center gap-2'>
-                              <Trash2 className="w-4 h-4"/>
-                            </div>
-                          </button>
+                          <div className="flex items-center justify-center space-x-2">
+                            {/* AI Question Generator / CN: AI问题生成器 */}
+                            <AIQuestionGeneratorCompact
+                              interview={interview}
+                              onQuestionsGenerated={() => {
+                                // Refresh data to show new questions count
+                                // CN: 刷新数据以显示新的问题数量
+                                fetchInterviews()
+                                showSuccessNotification(`AI questions generated for "${interview.title}"!`)
+                              }}
+                            />
+                            
+                            {/* Edit button / CN: 编辑按钮 */}
+                            <EditInterviewDrawer 
+                              interview={interview} 
+                              onInterviewUpdated={handleInterviewUpdated}
+                            />
+                            
+                            {/* Delete button / CN: 删除按钮 */}
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteClick(interview)}
+                              className="rounded-sm bg-red-50 px-2 py-1 text-sm font-semibold text-red-600 shadow-xs hover:bg-red-100"
+                            >
+                              <div className='flex items-center gap-2'>
+                                <Trash2 className="w-4 h-4"/>
+                              </div>
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))
