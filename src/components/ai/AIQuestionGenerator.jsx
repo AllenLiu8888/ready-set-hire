@@ -82,12 +82,6 @@ export default function AIQuestionGenerator({
     lg: 'px-4 py-2 text-base'
   }
 
-  const iconSizes = {
-    sm: 'w-3 h-3',
-    md: 'w-4 h-4',
-    lg: 'w-5 h-5'
-  }
-
   // If AI is not configured, show config button
   // CN: 如果AI未配置，显示配置按钮
   if (!isAIAvailable) {
@@ -95,14 +89,15 @@ export default function AIQuestionGenerator({
       <div className="relative">
         <button
           onClick={() => setShowConfig(!showConfig)}
-          className={`inline-flex items-center space-x-2 rounded-md bg-gray-100 text-gray-600 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 ${sizeClasses[size]} ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+          className={`rounded-sm bg-zinc-50 px-2 py-1 text-sm font-semibold text-zinc-600 shadow-xs hover:bg-zinc-100 mr-2 ${sizeClasses[size]} ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
           disabled={disabled}
           title="AI question generation is not configured"
         >
-          <AlertTriangle className={iconSizes[size]} />
-          <span>AI Setup Required</span>
+          <div className='flex items-center gap-2'>
+            <AlertTriangle className="w-4 h-4" />
+            <span>AI Setup Required</span>
+          </div>
         </button>
-
         {/* Configuration Info Popup */}
         {showConfig && (
           <div className="absolute top-full mt-2 left-0 bg-white border border-gray-200 rounded-lg shadow-lg p-4 w-80 z-10">
@@ -144,17 +139,19 @@ export default function AIQuestionGenerator({
       <button
         onClick={handleGenerateQuestions}
         disabled={isGenerating || disabled}
-        className={`inline-flex items-center space-x-2 rounded-md bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:from-purple-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 ${sizeClasses[size]}`}
+        className={`rounded-sm bg-purple-50 px-2 py-1 text-sm font-semibold text-purple-600 shadow-xs hover:bg-purple-100 mr-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
         title={`Generate interview questions using AI for "${interview?.job_role || 'this position'}"`}
       >
-        {isGenerating ? (
-          <Loader2 className={`${iconSizes[size]} animate-spin`} />
-        ) : (
-          <Sparkles className={iconSizes[size]} />
-        )}
-        <span>
-          {isGenerating ? 'Generating...' : 'Generate Questions'}
-        </span>
+        <div className='flex items-center gap-2'>
+          {isGenerating ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : (
+            <Sparkles className="w-4 h-4" />
+          )}
+          <span>
+            {isGenerating ? 'Generating...' : 'AI Questions'}
+          </span>
+        </div>
       </button>
 
       {/* Status Messages */}

@@ -1,6 +1,5 @@
 // AI Question Generation Service
 // CN: AI问题生成服务
-import { apiRequest } from './apiClient.js'
 import { createQuestion } from './questionService.js'
 
 /**
