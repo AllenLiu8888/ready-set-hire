@@ -1,3 +1,12 @@
+// =============================================================================
+// Edit Question Drawer - Modal form for editing existing interview questions
+// CN: 编辑问题抽屉 - 编辑现有面试问题的模态表单
+// =============================================================================
+// This component provides a modal interface for editing existing interview questions,
+// including form validation, data pre-filling, and API integration for updates.
+// CN: 该组件提供编辑现有面试问题的模态界面，包括表单验证、数据预填充和API集成更新。
+// =============================================================================
+
 import { useState, useEffect } from 'react'
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
 import { X } from 'lucide-react';

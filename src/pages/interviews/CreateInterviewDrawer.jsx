@@ -1,3 +1,12 @@
+// =============================================================================
+// Create Interview Drawer - Modal form for adding new interview templates
+// CN: 创建面试抽屉 - 添加新面试模板的模态表单
+// =============================================================================
+// This component provides a modal interface for creating new interview templates,
+// including form validation, company/role selection, and API integration.
+// CN: 该组件提供创建新面试模板的模态界面，包括表单验证、公司/职位选择和API集成。
+// =============================================================================
+
 import { useState } from 'react'
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
 import { CirclePlus } from 'lucide-react';
@@ -7,6 +16,7 @@ import TextAreaInput from '../../components/form/TextAreaInput';
 import SelectInput from '../../components/form/SelectInput';
 import ActionButton from '../../components/form/ActionButton';
 import DividerContainer from '../../components/form/DividerContainer';
+
 // Import API service for creating interviews
 // CN: 导入创建面试的 API 服务
 import { createInterview } from '../../services';

@@ -1,3 +1,12 @@
+// =============================================================================
+// Create Question Drawer - Modal form for adding new interview questions
+// CN: 创建问题抽屉 - 添加新面试问题的模态表单
+// =============================================================================
+// This component provides a modal interface for creating new interview questions,
+// including difficulty selection, interview association, and API integration.
+// CN: 该组件提供创建新面试问题的模态界面，包括难度选择、面试关联和API集成。
+// =============================================================================
+
 import { useState, useEffect } from 'react'
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
 import { X } from 'lucide-react';

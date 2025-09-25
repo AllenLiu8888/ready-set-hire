@@ -1,7 +1,20 @@
+// =============================================================================
+// Desktop Sidebar Component - Fixed navigation sidebar for desktop layout
+// CN: 桌面侧边栏组件 - 桌面布局的固定导航侧边栏
+// =============================================================================
+// Provides the main navigation sidebar for desktop screens, including brand logo,
+// navigation items, and profile section with responsive styling.
+// CN: 为桌面屏幕提供主导航侧边栏，包括品牌标志、导航项目和个人资料部分，具有响应式样式。
+// =============================================================================
+
 import { NavLink } from 'react-router-dom'
 
-// Desktop-only sidebar: shows brand, primary navigation, and a fixed profile link.
-// 桌面侧边栏：展示品牌、主导航与固定的个人入口。
+/**
+ * Desktop-only sidebar component for main navigation
+ * Shows brand, primary navigation, and a fixed profile link.
+ * CN: 仅桌面端的侧边栏组件，用于主导航
+ * 展示品牌、主导航与固定的个人入口。
+ */
 function DesktopSidebar({ navigation, logoSrc, profile }) {
   return (
     <div className="fixed inset-y-0 z-50 flex w-72 flex-col bg-neutral-700">

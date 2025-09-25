@@ -1,7 +1,19 @@
+// =============================================================================
+// Application Layout Component - Main admin interface structure
+// CN: 应用布局组件 - 主管理界面结构
+// =============================================================================
+// This layout component provides the main admin interface structure with sidebar
+// navigation, header, and content area for all management pages.
+// CN: 该布局组件为所有管理页面提供主管理界面结构，包含侧边栏导航、头部和内容区域。
+// =============================================================================
+// Based on Tailwind CSS Plus official sidebar template, adapted for ReadySetHire routing.
+// Global layout elements like branding, navigation, and color schemes can be adjusted here.
+// CN: 基于 Tailwind CSS Plus 官方侧边栏模板，适配 ReadySetHire 路由。
+// 可在此统一调整品牌、导航、配色等全局布局元素。
+// =============================================================================
+
 'use client'
 
-// 布局组件基于 Tailwind CSS Plus 官方侧边栏模板，改造以匹配 ReadySetHire 路由。
-// 在此文件即可统一调整品牌、导航、配色等全局布局元素。
 import DesktopSidebar from './DesktopSidebar.jsx'
 import { Outlet } from 'react-router-dom'
 import {

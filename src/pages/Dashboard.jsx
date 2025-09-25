@@ -1,5 +1,12 @@
+// =============================================================================
 // Dashboard Page - Overview of all system data
 // CN: 仪表板页面 - 系统所有数据概览
+// =============================================================================
+// This page provides a comprehensive overview of the interview management system,
+// displaying statistics, recent activities, and quick navigation actions.
+// CN: 该页面提供面试管理系统的全面概览，显示统计数据、最近活动和快速导航操作。
+// =============================================================================
+
 import { useState, useEffect } from 'react'
 import { 
   Briefcase, 
@@ -40,14 +47,30 @@ const StatusBadge = ({ type, children }) => {
 }
 
 const DashboardPage = () => {
+  // =============================================================================
+  // Component State Management
+  // CN: 组件状态管理
+  // =============================================================================
+  
   // State management for dashboard data
   // CN: 仪表板数据的状态管理
-  const [interviews, setInterviews] = useState([])
-  const [questions, setQuestions] = useState([])
-  const [applicants, setApplicants] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-  const [lastUpdated, setLastUpdated] = useState(null)
+  const [interviews, setInterviews] = useState([]) // All interviews data
+  // CN: 所有面试数据
+  const [questions, setQuestions] = useState([]) // All questions data
+  // CN: 所有问题数据
+  const [applicants, setApplicants] = useState([]) // All applicants data
+  // CN: 所有候选人数据
+  const [loading, setLoading] = useState(true) // Loading state for data fetching
+  // CN: 数据获取的加载状态
+  const [error, setError] = useState(null) // Error state for failed requests
+  // CN: 请求失败的错误状态
+  const [lastUpdated, setLastUpdated] = useState(null) // Timestamp of last data update
+  // CN: 最后数据更新的时间戳
+
+  // =============================================================================
+  // Data Fetching Functions
+  // CN: 数据获取函数
+  // =============================================================================
 
   // Function to fetch all dashboard data
   // CN: 获取所有仪表板数据的函数
@@ -87,6 +110,11 @@ const DashboardPage = () => {
     fetchDashboardData()
   }, [])
 
+  // =============================================================================
+  // Data Processing and Statistics
+  // CN: 数据处理和统计
+  // =============================================================================
+
   // Calculate statistics
   // CN: 计算统计数据
   const stats = {
@@ -119,6 +147,11 @@ const DashboardPage = () => {
   // CN: 获取最近活动（每个类别的最后几个项目）
   const recentInterviews = interviews.slice(0, 5)
   const recentApplicants = applicants.slice(0, 5)
+
+  // =============================================================================
+  // Conditional Rendering - Loading and Error States
+  // CN: 条件渲染 - 加载和错误状态
+  // =============================================================================
 
   // Loading state
   // CN: 加载状态
@@ -165,9 +198,17 @@ const DashboardPage = () => {
     )
   }
 
+  // =============================================================================
+  // Main Dashboard Render
+  // CN: 主仪表板渲染
+  // =============================================================================
+
   return (
     <div className="space-y-8">
-      {/* Header */}
+      {/* =================================================================== */}
+      {/* Dashboard Header Section */}
+      {/* CN: 仪表板头部区域 */}
+      {/* =================================================================== */}
       <div className="border-b border-gray-200 pb-5">
         <div className="flex items-center justify-between">
           <div>
@@ -191,7 +232,10 @@ const DashboardPage = () => {
         </div>
       </div>
 
-      {/* Statistics Cards */}
+      {/* =================================================================== */}
+      {/* Statistics Cards Section */}
+      {/* CN: 统计卡片区域 */}
+      {/* =================================================================== */}
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {/* Interviews Overview */}
         <div className="bg-white overflow-hidden shadow rounded-lg">
@@ -311,7 +355,10 @@ const DashboardPage = () => {
         </div>
       </div>
 
-      {/* Recent Activity */}
+      {/* =================================================================== */}
+      {/* Recent Activity Section */}
+      {/* CN: 最近活动区域 */}
+      {/* =================================================================== */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         {/* Recent Interviews */}
         <div className="bg-white shadow rounded-lg">
@@ -402,7 +449,10 @@ const DashboardPage = () => {
         </div>
       </div>
 
-      {/* Quick Actions */}
+      {/* =================================================================== */}
+      {/* Quick Actions Section */}
+      {/* CN: 快速操作区域 */}
+      {/* =================================================================== */}
       <div className="bg-white shadow rounded-lg">
         <div className="px-6 py-4 border-b border-gray-200">
           <h3 className="text-lg font-medium text-gray-900">Quick Actions</h3>

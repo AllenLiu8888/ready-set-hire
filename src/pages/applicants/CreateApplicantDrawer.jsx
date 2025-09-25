@@ -1,3 +1,12 @@
+// =============================================================================
+// Create Applicant Drawer - Modal form for adding new interview candidates
+// CN: 创建候选人抽屉 - 添加新面试候选人的模态表单
+// =============================================================================
+// This component provides a modal interface for creating new applicants,
+// including form validation, interview selection, and API integration.
+// CN: 该组件提供创建新候选人的模态界面，包括表单验证、面试选择和API集成。
+// =============================================================================
+
 import { useState, useEffect } from 'react'
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
 import { UserPlus } from 'lucide-react';

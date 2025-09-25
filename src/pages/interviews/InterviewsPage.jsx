@@ -1,3 +1,12 @@
+// =============================================================================
+// Interviews Management Page - CRUD operations for interview templates
+// CN: 面试管理页面 - 面试模板的增删改查操作
+// =============================================================================
+// This page provides comprehensive interview management functionality including
+// creation, editing, deletion, AI question generation, and statistics display.
+// CN: 该页面提供全面的面试管理功能，包括创建、编辑、删除、AI问题生成和统计显示。
+// =============================================================================
+
 import { CircleQuestionMark, Users, Trash2, RefreshCcw } from 'lucide-react';
 import { tv } from 'tailwind-variants';
 import { useState, useEffect } from 'react';
@@ -12,7 +21,10 @@ import { AIQuestionGeneratorCompact } from '../../components/ai/AIQuestionGenera
 import { getInterviews, deleteInterview, getQuestions, getApplicants } from '../../services';
 import { storeInterviews } from '../../utils/interviewUtils';
 
-
+// =============================================================================
+// Tailwind Variants for Dynamic Styling
+// CN: 动态样式的Tailwind变体
+// =============================================================================
 
 const InterviewStatus = tv({
   base: 'inline-flex items-center rounded-md px-2 py-1 text-xs font-medium',
@@ -36,6 +48,11 @@ const ApplicantsStatus = tv({
 })
 
 export default function InterviewsPage() {
+  // =============================================================================
+  // Component State Management
+  // CN: 组件状态管理
+  // =============================================================================
+  
   // State management for interviews data and UI states
   // CN: 面试数据和 UI 状态的状态管理
   const [interviews, setInterviews] = useState([]) // Store interviews list / CN: 存储面试列表

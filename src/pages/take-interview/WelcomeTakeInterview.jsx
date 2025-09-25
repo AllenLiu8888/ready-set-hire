@@ -1,3 +1,12 @@
+// =============================================================================
+// Welcome Take Interview Page - Applicant pre-interview information display
+// CN: 欢迎参加面试页面 - 候选人面试前信息展示
+// =============================================================================
+// This page displays applicant information and interview details before starting
+// the actual interview process, providing context and instructions to candidates.
+// CN: 该页面在开始实际面试流程前显示候选人信息和面试详情，为候选人提供背景和说明。
+// =============================================================================
+
 import { useState, useEffect, useCallback } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { User, Mail, Phone, Building, Clock, FileText, ChevronRight } from 'lucide-react'

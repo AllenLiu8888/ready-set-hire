@@ -1,3 +1,12 @@
+// =============================================================================
+// Applicants Management Page - CRUD operations for interview candidates
+// CN: 候选人管理页面 - 面试候选人的增删改查操作
+// =============================================================================
+// This page manages interview applicants including creation, editing, deletion,
+// invitation link generation, and status tracking with real-time updates.
+// CN: 该页面管理面试候选人，包括创建、编辑、删除、邀请链接生成和实时状态跟踪。
+// =============================================================================
+
 import { tv } from 'tailwind-variants';
 import { RefreshCcw, Trash2, Link, Users } from 'lucide-react';
 import { useState, useEffect } from 'react';
@@ -11,6 +20,11 @@ import SuccessAlert from '../../components/shared/alerts/SuccessAlert.jsx';
 import { getApplicants, deleteApplicant } from '../../services';
 import { getInterviewTitleById } from '../../utils/interviewUtils';
 
+// =============================================================================
+// Tailwind Variants for Dynamic Styling
+// CN: 动态样式的Tailwind变体
+// =============================================================================
+
 const ApplicantsStatus = tv({
   base: 'inline-flex items-center rounded-md px-2 py-1 text-xs font-medium',
   variants: {
@@ -20,7 +34,13 @@ const ApplicantsStatus = tv({
     },
   },
 })
+
 export default function ApplicantsPage() {
+  // =============================================================================
+  // Component State Management
+  // CN: 组件状态管理
+  // =============================================================================
+  
   // State management for applicants data and UI states
   // CN: 候选人数据和 UI 状态的状态管理
   const [applicants, setApplicants] = useState([]) // Store applicants list / CN: 存储候选人列表

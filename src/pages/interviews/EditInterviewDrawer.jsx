@@ -1,3 +1,12 @@
+// =============================================================================
+// Edit Interview Drawer - Modal form for editing existing interview templates
+// CN: 编辑面试抽屉 - 编辑现有面试模板的模态表单
+// =============================================================================
+// This component provides a modal interface for editing existing interview templates,
+// including form validation, data pre-filling, and API integration for updates.
+// CN: 该组件提供编辑现有面试模板的模态界面，包括表单验证、数据预填充和API集成更新。
+// =============================================================================
+
 import { useState, useEffect } from 'react'
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
 import { SquarePen } from 'lucide-react';
@@ -7,6 +16,7 @@ import TextAreaInput from '../../components/form/TextAreaInput';
 import SelectInput from '../../components/form/SelectInput';
 import ActionButton from '../../components/form/ActionButton';
 import DividerContainer from '../../components/form/DividerContainer';
+
 // Import API service for updating interviews
 // CN: 导入更新面试的 API 服务
 import { updateInterview } from '../../services';

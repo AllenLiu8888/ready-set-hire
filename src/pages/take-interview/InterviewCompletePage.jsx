@@ -1,5 +1,12 @@
+// =============================================================================
 // Interview Complete Page - Success screen after interview submission
 // CN: 面试完成页面 - 面试提交后的成功界面
+// =============================================================================
+// This page displays completion confirmation after an applicant successfully
+// submits their interview, showing summary information and next steps.
+// CN: 该页面在候选人成功提交面试后显示完成确认，展示摘要信息和下一步骤。
+// =============================================================================
+
 import { useState, useEffect, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
 import { Check, User, Briefcase, Clock, Mail } from 'lucide-react'

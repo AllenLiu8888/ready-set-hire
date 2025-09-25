@@ -1,5 +1,12 @@
+// =============================================================================
 // AI Question Generation Service
 // CN: AI问题生成服务
+// =============================================================================
+// This service provides AI-powered interview question generation capabilities
+// using various LLM providers like OpenAI, Azure OpenAI, or local models.
+// CN: 该服务使用各种LLM提供商（如OpenAI、Azure OpenAI或本地模型）提供AI驱动的面试问题生成功能。
+// =============================================================================
+
 import { createQuestion } from './questionService.js'
 
 /**
@@ -43,6 +50,11 @@ export async function generateInterviewQuestions(interviewData, questionCount = 
     throw new Error(`Failed to generate interview questions: ${error.message}`)
   }
 }
+
+// =============================================================================
+// Main Question Generation Functions
+// CN: 主要问题生成函数
+// =============================================================================
 
 /**
  * Generate questions and automatically add them to the interview
@@ -94,6 +106,11 @@ export async function generateAndCreateQuestions(interview, questionCount = 8) {
     throw error
   }
 }
+
+// =============================================================================
+// AI Integration Helper Functions
+// CN: AI集成辅助函数
+// =============================================================================
 
 /**
  * Create prompt for AI question generation
@@ -241,6 +258,11 @@ function parseAIResponse(response) {
     return getFallbackQuestions()
   }
 }
+
+// =============================================================================
+// Configuration and Utility Functions
+// CN: 配置和工具函数
+// =============================================================================
 
 /**
  * Get AI API configuration

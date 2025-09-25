@@ -1,3 +1,12 @@
+// =============================================================================
+// Questions Management Page - CRUD operations for interview questions
+// CN: 问题管理页面 - 面试问题的增删改查操作
+// =============================================================================
+// This page manages interview questions including creation, editing, deletion,
+// difficulty categorization, and interview association with real-time updates.
+// CN: 该页面管理面试问题，包括创建、编辑、删除、难度分类和面试关联，具有实时更新功能。
+// =============================================================================
+
 import { RefreshCcw, CircleQuestionMark } from 'lucide-react';
 import { Trash2 } from 'lucide-react';
 import { tv } from 'tailwind-variants';

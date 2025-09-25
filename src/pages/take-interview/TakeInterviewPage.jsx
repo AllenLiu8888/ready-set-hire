@@ -1,7 +1,17 @@
+// =============================================================================
+// Take Interview Page - Main interview taking interface with speech recognition
+// CN: 参加面试页面 - 带语音识别的主要面试界面
+// =============================================================================
+// This page handles the complete interview-taking experience for applicants,
+// including question navigation, voice recording, text input, and submission.
+// CN: 该页面处理候选人的完整面试体验，包括问题导航、语音录制、文本输入和提交。
+// =============================================================================
+
 import { useState, useEffect, useCallback } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { Check, Mic, Square, Play, Pause } from 'lucide-react'
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
+
 // Import API services for getting applicant and questions
 // CN: 导入获取候选人和题目的 API 服务
 import { getApplicant, getQuestions, createApplicantAnswer, updateApplicant } from '../../services'
@@ -13,18 +23,40 @@ function classNames(...classes) {
 }
 
 export default function TakeInterviewPage() {
-  const { applicantId } = useParams() // Get applicant ID from URL / CN: 从URL获取候选人ID
-  const navigate = useNavigate()
+  // =============================================================================
+  // URL Parameters and Navigation
+  // CN: URL参数和导航
+  // =============================================================================
+  
+  const { applicantId } = useParams() // Get applicant ID from URL
+  // CN: 从URL获取候选人ID
+  const navigate = useNavigate() // React Router navigation function
+  // CN: React Router导航函数
 
+  // =============================================================================
+  // Speech Recognition Integration
+  // CN: 语音识别集成
+  // =============================================================================
+  
   // Speech Recognition hook
   // CN: 语音识别钩子
   const {
-    transcript,
-    listening,
-    resetTranscript,
-    browserSupportsSpeechRecognition,
-    isMicrophoneAvailable
+    transcript, // Real-time transcript of spoken words
+    // CN: 语音单词的实时转录
+    listening, // Whether microphone is currently active
+    // CN: 麦克风是否当前活跃
+    resetTranscript, // Function to clear current transcript
+    // CN: 清除当前转录的函数
+    browserSupportsSpeechRecognition, // Browser compatibility check
+    // CN: 浏览器兼容性检查
+    isMicrophoneAvailable // Microphone permission status
+    // CN: 麦克风权限状态
   } = useSpeechRecognition()
+
+  // =============================================================================
+  // Component State Management
+  // CN: 组件状态管理
+  // =============================================================================
 
   // State management for the interview process
   // CN: 面试流程的状态管理
@@ -41,6 +73,11 @@ export default function TakeInterviewPage() {
   const [recordingStates, setRecordingStates] = useState({}) // Track recording state per question / CN: 跟踪每个题目的录音状态
   const [submitting, setSubmitting] = useState(false) // Submission state / CN: 提交状态
   const [currentRecordingQuestion, setCurrentRecordingQuestion] = useState(null) // Currently recording question / CN: 当前录音的题目
+
+  // =============================================================================
+  // Data Processing and UI Helper Functions
+  // CN: 数据处理和UI辅助函数
+  // =============================================================================
 
   // Interview steps for progress indicator
   // CN: 面试进度指示器的步骤
@@ -130,6 +167,11 @@ export default function TakeInterviewPage() {
       }))
     }
   }, [transcript, currentRecordingQuestion])
+
+  // =============================================================================
+  // Event Handlers and User Interactions
+  // CN: 事件处理器和用户交互
+  // =============================================================================
 
   // Handle answer text change
   // CN: 处理答案文本变化
