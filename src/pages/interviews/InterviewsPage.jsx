@@ -1,10 +1,11 @@
 import { CircleQuestionMark } from 'lucide-react';
 import { RefreshCcw } from 'lucide-react';
 import { Users } from 'lucide-react';
-import { CirclePlus } from 'lucide-react';
 import { SquarePen } from 'lucide-react';
 import { Trash2 } from 'lucide-react';
 import { tv } from 'tailwind-variants';
+import EditInterviewDrawer from './EditInterviewDrawer.jsx';  
+
 
 const InterviewStatus = tv({
   base: 'inline-flex items-center rounded-md px-2 py-1 text-xs font-medium',
@@ -56,14 +57,7 @@ export default function InterviewsPage() {
               <RefreshCcw className="w-4 h-4"/> Refresh
             </div>
           </button>
-          <button
-            type="button"
-            className="block rounded-md bg-slate-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-xs hover:bg-slate-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-          >
-            <div className="flex items-center gap-2">
-              <CirclePlus className="w-4 h-4"/>  Add Interview
-            </div>
-          </button>
+          <EditInterviewDrawer />
         </div>  
       </div>
       <div className="mt-8 flow-root">
