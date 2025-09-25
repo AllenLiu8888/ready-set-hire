@@ -37,10 +37,16 @@ export async function apiRequest(endpoint, method = 'GET', body = null) {
     options.headers['Prefer'] = 'return=representation';
   }
 
-  // If a body is provided, add it to the request and include the username
-  // CN: 如果提供了主体，将其添加到请求中并包含用户名
+  // Handle body and username for different methods
+  // CN: 为不同方法处理主体和用户名
   if (body) {
+    // For POST/PATCH, include body with username
+    // CN: 对于 POST/PATCH，包含带用户名的主体
     options.body = JSON.stringify({ ...body, username: config.api.username });
+  } else if (method === 'DELETE') {
+    // For DELETE, send only username in body (required by PostgREST)
+    // CN: 对于 DELETE，仅在主体中发送用户名（PostgREST 要求）
+    options.body = JSON.stringify({ username: config.api.username });
   }
 
   // Make the API request and check if the response is OK
@@ -48,10 +54,20 @@ export async function apiRequest(endpoint, method = 'GET', body = null) {
   const response = await fetch(`${config.api.baseUrl}${endpoint}`, options);
   
   if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
+    // Create more detailed error message
+    // CN: 创建更详细的错误消息
+    const errorText = await response.text();
+    throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
   }
   
-  // Return the response as a JSON object
-  // CN: 将响应作为 JSON 对象返回
-  return response.json();
+  // Handle empty responses (common for DELETE operations)
+  // CN: 处理空响应（DELETE 操作常见）
+  const contentType = response.headers.get('content-type');
+  if (contentType && contentType.includes('application/json')) {
+    return response.json();
+  } else {
+    // Return empty object for non-JSON responses (like DELETE)
+    // CN: 对于非 JSON 响应（如 DELETE）返回空对象
+    return {};
+  }
 }

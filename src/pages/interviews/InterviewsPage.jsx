@@ -3,6 +3,8 @@ import { tv } from 'tailwind-variants';
 import { useState, useEffect } from 'react';
 import EditInterviewDrawer from './EditInterviewDrawer.jsx';  
 import CreateInterviewDrawer from './CreateInterviewDrawer.jsx';
+import ConfirmAlert from '../../components/shared/alerts/ConfirmAlert.jsx';
+
 // Import API services
 // CN: 导入 API 服务
 import { getInterviews, deleteInterview } from '../../services';
@@ -36,6 +38,11 @@ export default function InterviewsPage() {
   const [interviews, setInterviews] = useState([]) // Store interviews list / CN: 存储面试列表
   const [loading, setLoading] = useState(true) // Loading state / CN: 加载状态
   const [error, setError] = useState(null) // Error state / CN: 错误状态
+  
+  // State for delete confirmation dialog
+  // CN: 删除确认对话框的状态
+  const [showConfirm, setShowConfirm] = useState(false) // Control confirm dialog / CN: 控制确认对话框
+  const [interviewToDelete, setInterviewToDelete] = useState(null) // Interview to be deleted / CN: 要删除的面试
 
   // Function to fetch interviews from API
   // CN: 从 API 获取面试数据的函数
@@ -63,35 +70,68 @@ export default function InterviewsPage() {
     }
   }
 
-  // Function to handle interview deletion
-  // CN: 处理面试删除的函数
-  const handleDeleteInterview = async (interviewId) => {
-    // Show confirmation dialog
-    // CN: 显示确认对话框
-    // TODO:加入好看的确认框，TailwindCSSPLUS的
-    if (!window.confirm('Are you sure you want to delete this interview?')) {
-      return
-    }
+  // Function to handle delete button click - shows confirmation dialog
+  // CN: 处理删除按钮点击 - 显示确认对话框
+  const handleDeleteClick = (interview) => {
+    setInterviewToDelete(interview) // Store interview to delete / CN: 存储要删除的面试
+    setShowConfirm(true) // Show confirmation dialog / CN: 显示确认对话框
+  }
+
+  // Function to handle confirmed deletion
+  // CN: 处理确认删除的函数
+  const handleConfirmDelete = async () => {
+    if (!interviewToDelete) return
 
     try {
+      console.log('🗑️ Deleting interview:', interviewToDelete.id, interviewToDelete.title)
+      
       // Call API service to delete interview
       // CN: 调用 API 服务删除面试
-      await deleteInterview(interviewId)
+      await deleteInterview(interviewToDelete.id)
+      
+      console.log('✅ Delete API call successful')
       
       // Remove from local state (optimistic update)
       // CN: 从本地状态中移除（乐观更新）
-      setInterviews(prev => prev.filter(interview => interview.id !== interviewId))
+      setInterviews(prev => prev.filter(interview => interview.id !== interviewToDelete.id))
       
-      // Optional: Show success message
-      // CN: 可选：显示成功消息
-      // TODO:加入好看的成功信息，TailwindCSSPLUS的
-      console.log('Interview deleted successfully')
+      // Clean up state
+      // CN: 清理状态
+      setInterviewToDelete(null)
+      setShowConfirm(false)
+      
+      // Show success message
+      // CN: 显示成功消息
+      console.log('Interview deleted successfully:', interviewToDelete.title)
+      alert('Interview deleted successfully!')
+      // TODO: Add beautiful success notification with TailwindCSS
+      // CN: TODO: 使用 TailwindCSS 添加美观的成功通知
+      
     } catch (err) {
-      // Handle deletion errors
-      // CN: 处理删除错误
-      console.error('Failed to delete interview:', err)
-      alert('Failed to delete interview. Please try again.')
+      // Handle deletion errors with detailed logging
+      // CN: 处理删除错误并详细记录
+      console.error('❌ Failed to delete interview:', err)
+      console.error('❌ Interview details:', {
+        id: interviewToDelete.id,
+        title: interviewToDelete.title,
+        error: err.message
+      })
+      
+      // Show detailed error message
+      // CN: 显示详细错误消息
+      alert(`Failed to delete interview "${interviewToDelete.title}": ${err.message}`)
+      
+      // Keep dialog open so user can try again
+      // CN: 保持对话框打开，用户可以重试
+      // setShowConfirm(false) // Don't close on error
     }
+  }
+
+  // Function to handle dialog close
+  // CN: 处理对话框关闭的函数
+  const handleCloseConfirm = () => {
+    setShowConfirm(false)
+    setInterviewToDelete(null)
   }
 
   // Effect hook to fetch data when component mounts
@@ -230,9 +270,10 @@ export default function InterviewsPage() {
                             interview={interview} 
                             onInterviewUpdated={fetchInterviews} 
                           />
+                          {/* Delete button / CN: 删除按钮 */}
                           <button
                             type="button"
-                            onClick={() => handleDeleteInterview(interview.id)} // Add delete handler / CN: 添加删除处理器
+                            onClick={() => handleDeleteClick(interview)} // Use new click handler / CN: 使用新的点击处理器
                             className="rounded-sm bg-red-50 px-2 py-1 text-sm font-semibold text-red-600 shadow-xs hover:bg-red-100 ml-2"
                           >
                             <div className='flex items-center gap-2'>
@@ -249,6 +290,17 @@ export default function InterviewsPage() {
           </div>
         </div>
       </div>
+      
+      {/* Confirmation dialog for delete action / CN: 删除操作的确认对话框 */}
+      {showConfirm && (
+        <ConfirmAlert
+          open={showConfirm}
+          onClose={handleCloseConfirm}
+          onConfirm={handleConfirmDelete}
+          title="Delete Interview"
+          message={`Are you sure you want to delete "${interviewToDelete?.title}"? This action cannot be undone.`}
+        />
+      )}
     </div>
   )
 }
