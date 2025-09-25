@@ -56,7 +56,7 @@ const DashboardPage = () => {
       setLoading(true)
       setError(null)
       
-      console.log('📊 Fetching dashboard data...')
+      console.log('Fetching dashboard data...')
       
       // Fetch data from all endpoints in parallel
       // CN: 并行获取所有端点的数据
@@ -71,10 +71,10 @@ const DashboardPage = () => {
       setApplicants(applicantsData)
       setLastUpdated(new Date())
       
-      console.log('✅ Dashboard data loaded successfully')
+      console.log('Dashboard data loaded successfully')
       
     } catch (err) {
-      console.error('❌ Failed to fetch dashboard data:', err)
+      console.error('Failed to fetch dashboard data:', err)
       setError('Failed to load dashboard data. Please try again.')
     } finally {
       setLoading(false)

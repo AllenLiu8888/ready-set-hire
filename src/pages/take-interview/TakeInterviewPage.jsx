@@ -182,7 +182,7 @@ export default function TakeInterviewPage() {
         language: 'en-US'
       })
       
-      console.log('🎤 Started voice recording for question:', questionId)
+      console.log('Started voice recording for question:', questionId)
     } catch (error) {
       console.error('Failed to start recording:', error)
       alert('Failed to start voice recording. Please try again.')
@@ -211,8 +211,8 @@ export default function TakeInterviewPage() {
       // CN: 清除当前录音题目
       setCurrentRecordingQuestion(null)
       
-      console.log('⏹️ Stopped voice recording for question:', questionId)
-      console.log('📝 Transcript:', transcript)
+      console.log('Stopped voice recording for question:', questionId)
+      console.log('Transcript:', transcript)
     } catch (error) {
       console.error('Failed to stop recording:', error)
     }
@@ -269,7 +269,7 @@ export default function TakeInterviewPage() {
       }
     }
     
-    console.log('▶️ Toggle transcript playback for question:', questionId)
+    console.log('Toggle transcript playback for question:', questionId)
   }
 
   // Navigate to next question
@@ -582,13 +582,13 @@ export default function TakeInterviewPage() {
                 {/* Show browser support warnings */}
                 {!browserSupportsSpeechRecognition && (
                   <div className="text-yellow-600 text-sm">
-                    ⚠️ Speech recognition not supported. Please use Chrome, Edge, or Safari.
+                    Warning: Speech recognition not supported. Please use Chrome, Edge, or Safari.
                   </div>
                 )}
                 
                 {!isMicrophoneAvailable && browserSupportsSpeechRecognition && (
                   <div className="text-yellow-600 text-sm">
-                    🎤 Microphone access required. Please allow microphone permissions.
+                    Microphone access required. Please allow microphone permissions.
                   </div>
                 )}
               </div>
@@ -618,7 +618,7 @@ export default function TakeInterviewPage() {
                 <div className="bg-green-50 border border-green-200 rounded-md p-4">
                   <p className="text-green-900">"{currentRecordingState.transcriptText}"</p>
                   <p className="text-xs text-green-600 mt-2">
-                    ✅ Voice response saved. You can record again to replace it.
+                    Voice response saved. You can record again to replace it.
                   </p>
                 </div>
               </div>

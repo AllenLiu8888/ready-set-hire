@@ -61,7 +61,7 @@ export default function InterviewsPage() {
       setLoading(true) // Start loading / CN: 开始加载
       setError(null) // Clear previous errors / CN: 清除之前的错误
       
-      console.log('📊 Fetching interviews, questions, and applicants data...')
+      console.log('Fetching interviews, questions, and applicants data...')
       
       // Fetch all data in parallel for better performance
       // CN: 并行获取所有数据以提高性能
@@ -81,7 +81,7 @@ export default function InterviewsPage() {
       // CN: 将面试数据存储到localStorage供其他组件使用
       storeInterviews(interviewsData)
       
-      console.log('✅ All data loaded successfully')
+      console.log('All data loaded successfully')
       
     } catch (err) {
       // Handle errors

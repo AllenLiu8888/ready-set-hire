@@ -9,12 +9,12 @@ export function checkConfigInDev() {
     const status = getConfigStatus()
     
     if (status.valid) {
-      console.log('🚀 ReadySetHire API Configuration:', status.message)
+      console.log('ReadySetHire API Configuration:', status.message)
     } else {
-      console.group('⚠️ ReadySetHire Configuration Issues')
+      console.group('ReadySetHire Configuration Issues')
       console.warn(status.message)
       console.log('Configuration details:', status.details)
-      console.log('📝 To fix this:')
+      console.log('To fix this:')
       console.log('1. Open your .env.local file')
       console.log('2. Get your JWT token from Blackboard My Grades')
       console.log('3. Set VITE_JWT_TOKEN to your actual token')

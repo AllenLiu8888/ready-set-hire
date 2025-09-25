@@ -76,7 +76,7 @@ export default function CreateApplicantDrawer({ onApplicantCreated }) {
   const handleInputChange = (field, value) => {
     // Debug: Log input changes
     // CN: 调试：记录输入变化
-    console.log('🔄 Input change:', { field, value, valueType: typeof value })
+    console.log('Input change:', { field, value, valueType: typeof value })
     
     setFormData(prev => ({
       ...prev,           // Keep existing fields / CN: 保留现有字段
@@ -109,8 +109,8 @@ export default function CreateApplicantDrawer({ onApplicantCreated }) {
 
       // Debug: Log form data before sending
       // CN: 调试：发送前记录表单数据
-      console.log('📝 Submitting applicant form data:', formData)
-      console.log('📝 Form data type check:', {
+      console.log('Submitting applicant form data:', formData)
+      console.log('Form data type check:', {
         title: typeof formData.title,
         firstname: typeof formData.firstname,
         surname: typeof formData.surname,

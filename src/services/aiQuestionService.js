@@ -21,7 +21,7 @@ import { createQuestion } from './questionService.js'
  */
 export async function generateInterviewQuestions(interviewData, questionCount = 8) {
   try {
-    console.log('🤖 Generating interview questions for:', interviewData)
+    console.log('Generating interview questions for:', interviewData)
     
     // Create prompt for AI
     // CN: 为AI创建提示词
@@ -35,11 +35,11 @@ export async function generateInterviewQuestions(interviewData, questionCount = 
     // CN: 解析和验证问题
     const questions = parseAIResponse(aiResponse)
     
-    console.log('✅ Generated', questions.length, 'questions successfully')
+    console.log('Generated', questions.length, 'questions successfully')
     return questions
     
   } catch (error) {
-    console.error('❌ Failed to generate questions:', error)
+    console.error('Failed to generate questions:', error)
     throw new Error(`Failed to generate interview questions: ${error.message}`)
   }
 }
@@ -57,7 +57,7 @@ export async function generateInterviewQuestions(interviewData, questionCount = 
  */
 export async function generateAndCreateQuestions(interview, questionCount = 8) {
   try {
-    console.log('🚀 Starting AI question generation and creation process...')
+    console.log('Starting AI question generation and creation process...')
     
     // Generate questions using AI
     // CN: 使用AI生成问题
@@ -75,22 +75,22 @@ export async function generateAndCreateQuestions(interview, questionCount = 8) {
           difficulty: questionData.difficulty || 'Intermediate'
         }
         
-        console.log('💾 Creating question:', questionToCreate.question.substring(0, 50) + '...')
+        console.log('Creating question:', questionToCreate.question.substring(0, 50) + '...')
         const createdQuestion = await createQuestion(questionToCreate)
         createdQuestions.push(createdQuestion)
         
       } catch (createError) {
-        console.error('❌ Failed to create question:', questionData.question, createError)
+        console.error('Failed to create question:', questionData.question, createError)
         // Continue with other questions even if one fails
         // CN: 即使一个问题失败也继续处理其他问题
       }
     }
     
-    console.log(`✅ Successfully created ${createdQuestions.length} out of ${generatedQuestions.length} questions`)
+    console.log(`Successfully created ${createdQuestions.length} out of ${generatedQuestions.length} questions`)
     return createdQuestions
     
   } catch (error) {
-    console.error('❌ Failed to generate and create questions:', error)
+    console.error('Failed to generate and create questions:', error)
     throw error
   }
 }
@@ -144,7 +144,7 @@ async function callAIAPI(prompt) {
   }
   
   try {
-    console.log('📡 Calling AI API...')
+    console.log('Calling AI API...')
     
     const response = await fetch(apiConfig.endpoint, {
       method: 'POST',
@@ -173,12 +173,12 @@ async function callAIAPI(prompt) {
     }
     
     const data = await response.json()
-    console.log('✅ AI API response received')
+    console.log('AI API response received')
     
     return data.choices?.[0]?.message?.content || data.response || data.text
     
   } catch (error) {
-    console.error('❌ AI API call failed:', error)
+    console.error('AI API call failed:', error)
     throw new Error(`AI API call failed: ${error.message}`)
   }
 }
@@ -229,11 +229,11 @@ function parseAIResponse(response) {
       throw new Error('No valid questions found in AI response')
     }
     
-    console.log(`✅ Parsed ${validQuestions.length} valid questions from AI response`)
+    console.log(`Parsed ${validQuestions.length} valid questions from AI response`)
     return validQuestions
     
   } catch (error) {
-    console.error('❌ Failed to parse AI response:', error)
+    console.error('Failed to parse AI response:', error)
     console.error('Raw response:', response)
     
     // Fallback: return some default questions

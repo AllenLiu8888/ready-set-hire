@@ -64,8 +64,8 @@ export default function CreateInterviewDrawer({ onInterviewCreated }) {
 
       // Debug: Log form data before sending
       // CN: 调试：发送前记录表单数据
-      console.log('📝 Submitting form data:', formData)
-      console.log('📝 Form data type check:', {
+      console.log('Submitting form data:', formData)
+      console.log('Form data type check:', {
         title: typeof formData.title,
         job_role: typeof formData.job_role, 
         description: typeof formData.description,

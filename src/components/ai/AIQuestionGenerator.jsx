@@ -43,13 +43,13 @@ export default function AIQuestionGenerator({
       setLastError(null)
       setLastSuccess(null)
 
-      console.log('🚀 Starting AI question generation for interview:', interview.title)
+      console.log('Starting AI question generation for interview:', interview.title)
 
       // Generate and create questions
       // CN: 生成并创建问题
       const createdQuestions = await generateAndCreateQuestions(interview, 8)
 
-      console.log('✅ AI question generation completed successfully')
+      console.log('AI question generation completed successfully')
       setLastSuccess(`Successfully generated ${createdQuestions.length} questions!`)
 
       // Notify parent component
@@ -63,7 +63,7 @@ export default function AIQuestionGenerator({
       setTimeout(() => setLastSuccess(null), 3000)
 
     } catch (error) {
-      console.error('❌ AI question generation failed:', error)
+      console.error('AI question generation failed:', error)
       setLastError(error.message)
       
       // Auto-hide error message after 5 seconds
@@ -115,7 +115,7 @@ export default function AIQuestionGenerator({
               <div className="mt-3">
                 <strong>Current Status:</strong>
                 <ul className="text-xs mt-1 space-y-1">
-                  <li>API Key: {configStatus.hasApiKey ? '✅ Configured' : '❌ Missing'}</li>
+                  <li>API Key: {configStatus.hasApiKey ? 'Configured' : 'Missing'}</li>
                   <li>Endpoint: {configStatus.endpoint}</li>
                   <li>Model: {configStatus.model}</li>
                 </ul>
@@ -179,10 +179,10 @@ export default function AIQuestionGenerator({
       {/* Debug Info (development only) */}
       {import.meta.env.DEV && showConfig && (
         <div className="absolute top-full mt-2 right-0 bg-gray-50 border border-gray-200 rounded-lg p-3 text-xs w-64 z-10">
-          <strong>🔍 AI Debug Info:</strong>
+          <strong>AI Debug Info:</strong>
           <ul className="mt-2 space-y-1">
-            <li>Available: {isAIAvailable ? '✅' : '❌'}</li>
-            <li>API Key: {configStatus.hasApiKey ? '✅' : '❌'}</li>
+            <li>Available: {isAIAvailable ? 'Yes' : 'No'}</li>
+            <li>API Key: {configStatus.hasApiKey ? 'Configured' : 'Missing'}</li>
             <li>Endpoint: {configStatus.endpoint}</li>
             <li>Model: {configStatus.model}</li>
           </ul>
