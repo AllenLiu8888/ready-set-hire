@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
 import { X } from 'lucide-react';
-import { MessageCirclePlus } from 'lucide-react';
+import { SquarePen } from 'lucide-react';
 import TextAreaInput from '../../components/form/TextAreaInput';
 import SelectInput from '../../components/form/SelectInput';
 import ActionButton from '../../components/form/ActionButton';
@@ -20,14 +20,21 @@ export default function EditQuestionDrawer() {
     { value: 'Advanced', label: 'Advanced' },
   ]
   return (
-    <div>
-      <button
+    <>
+      {/* <button
         type="button"
         className="block rounded-md bg-slate-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-xs hover:bg-slate-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
       >
         <div className="flex items-center gap-2" onClick={() => setOpen(true)}>
-          <MessageCirclePlus className="w-4 h-4"/>  Add Question
+          <MessageCirclePlus className="w-4 h-4"/>  Edit Question
         </div>
+      </button> */}
+      <button
+        type="button"
+        className="rounded-sm bg-blue-50 px-2 py-1 text-sm font-semibold text-blue-400 shadow-xs hover:bg-blue-100 mr-2">
+          <div className='flex items-center gap-2'>
+            <SquarePen className="w-4 h-4" onClick={() => setOpen(true)}/>
+          </div>
       </button>
       <Dialog open={open} onClose={setOpen} className="relative z-10">
         <div className="fixed inset-0" />
@@ -46,9 +53,9 @@ export default function EditQuestionDrawer() {
                     <div className="bg-slate-100 px-4 py-6 sm:px-6">
                       <div className="flex items-start justify-between space-x-3">
                         <div className="space-y-1 pt-8 pb-4 ">
-                          <DialogTitle className="text-3xl font-semibold text-gray-900">New Question</DialogTitle>
+                          <DialogTitle className="text-3xl font-semibold text-gray-900">Edit Question</DialogTitle>
                           <p className="text-base text-gray-500">
-                            Get started by filling in the information below to create your new question.
+                            Get started by filling in the information below to edit your question.
                           </p>
                         </div>
                         <div className="flex h-7 items-center">
@@ -71,13 +78,13 @@ export default function EditQuestionDrawer() {
                     </DividerContainer>
                   </div>
                   {/* Action buttons */}
-                  <ActionButton ActionContent="Create" onClick={() => setOpen(false)} />
+                  <ActionButton ActionContent="Update" onClick={() => setOpen(false)} />
                 </form>
               </DialogPanel>
             </div>
           </div>
         </div>
       </Dialog>
-    </div>
+    </>
   )
 }

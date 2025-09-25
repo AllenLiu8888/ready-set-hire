@@ -3,6 +3,7 @@ import { SquarePen } from 'lucide-react';
 import { Trash2 } from 'lucide-react';
 import { tv } from 'tailwind-variants'
 import EditQuestionDrawer from './EditQuestionDrawer.jsx';
+import CreateQuestionDrawer from './CreateQuestionDrawer.jsx';
 
 const QuestionsDifficulty = tv({
   base: 'inline-flex items-center rounded-md px-2 py-1 text-xs font-medium',
@@ -43,7 +44,7 @@ export default function QuestionsPage() {
               <RefreshCcw className="w-4 h-4"/> Refresh
             </div>
           </button>
-          <EditQuestionDrawer />
+          <CreateQuestionDrawer />
         </div>
       </div>
       <div className="mt-8 flow-root">
@@ -78,13 +79,14 @@ export default function QuestionsPage() {
                       <span className={QuestionsDifficulty({ status: Question.difficulty })}>{Question.difficulty}</span>
                       </td>
                       <td className="py-4 px-4 text-center text-sm font-medium whitespace-nowrap">
-                      <button
+                        <EditQuestionDrawer />
+                      {/* <button
                         type="button"
                         className="rounded-sm bg-blue-50 px-2 py-1 text-sm font-semibold text-blue-400 shadow-xs hover:bg-blue-100 mr-2">
                           <div className='flex items-center gap-2'>
                             <SquarePen className="w-4 h-4"/>
                           </div>
-                      </button>
+                      </button> */}
                       <button
                         type="button"
                         className="rounded-sm bg-red-50 px-2 py-1 text-sm font-semibold text-red-600 shadow-xs hover:bg-red-100">

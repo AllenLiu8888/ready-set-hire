@@ -1,8 +1,8 @@
 import { tv } from 'tailwind-variants'
 import { RefreshCcw } from 'lucide-react';
-import { SquarePen } from 'lucide-react';
 import { Trash2 } from 'lucide-react';
 import { Link } from 'lucide-react';
+import CreateApplicantDrawer from './CreateApplicantDrawer.jsx';
 import EditApplicantDrawer from './EditApplicantDrawer.jsx';
 
 const ApplicantsStatus = tv({
@@ -43,8 +43,8 @@ export default function ApplicantsPage() {
               <RefreshCcw className="w-4 h-4"/> Refresh
             </div>
           </button>
-          
-          <EditApplicantDrawer />
+
+          <CreateApplicantDrawer />
         </div>
       </div>
       <div className="mt-8 flow-root">
@@ -99,14 +99,15 @@ export default function ApplicantsPage() {
                           </div>
                           
                         </button>
-                        <button
+                        <EditApplicantDrawer />
+                        {/* <button
                             type="button"
                             className="rounded-sm bg-blue-50 px-2 py-1 text-sm font-semibold text-blue-400 shadow-xs hover:bg-blue-100 mr-2">
                               <div className='flex items-center gap-2'>
                                 <SquarePen className="w-4 h-4"/>
                               </div>
                             
-                        </button>
+                        </button> */}
                         <button
                           type="button"
                           className="rounded-sm bg-red-50 px-2 py-1 text-sm font-semibold text-red-600 shadow-xs hover:bg-red-100">

@@ -7,8 +7,8 @@ import TakeInterviewPage from './pages/take-interview/TakeInterviewPage.jsx'
 import NotFoundPage from './pages/NotFound.jsx'
 import DashboardPage from './pages/Dashboard.jsx'
 import EditInterviewDrawer from './pages/interviews/EditInterviewDrawer.jsx'
-import EditQuestionDrawer from './pages/questions/EditQuestionDrawer.jsx'
-import EditApplicantDrawer from './pages/applicants/EditApplicantDrawer.jsx'
+import EditQuestionDrawer from './pages/questions/CreateQuestionDrawer.jsx'
+import EditApplicantDrawer from './pages/applicants/CreateApplicantDrawer.jsx'
 
 function App() {
   return (

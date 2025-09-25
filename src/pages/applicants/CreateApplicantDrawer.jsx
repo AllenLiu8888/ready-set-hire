@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
-import { SquarePen } from 'lucide-react';
+import { UserPlus } from 'lucide-react';
 import { X } from 'lucide-react';
 import TextInput from '../../components/form/TextInput'; 
 import ActionButton from '../../components/form/ActionButton';
 import DividerContainer from '../../components/form/DividerContainer';
 import SelectInput from '../../components/form/SelectInput';
 
-export default function EditApplicantDrawer() {
+export default function CreateApplicantDrawer() {
   const [open, setOpen] = useState(false)
   const Interviews = [
     { value: '1', label: 'Interview 1', status:'Not Started'},
@@ -19,21 +19,14 @@ export default function EditApplicantDrawer() {
     { value: 'Completed', label: 'Completed' },
   ]
   return (
-    <>
-      {/* <button
+    <div>
+      <button
         type="button"
         className="block rounded-md bg-slate-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-xs hover:bg-slate-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
       >
         <div className="flex items-center gap-2" onClick={() => setOpen(true)}>
           <UserPlus className="w-4 h-4"/>  Add Applicant
         </div>
-      </button> */}
-      <button
-        type="button"
-        className="rounded-sm bg-blue-50 px-2 py-1 text-sm font-semibold text-blue-400 shadow-xs hover:bg-blue-100 mr-2">
-          <div className='flex items-center gap-2'>
-            <SquarePen className="w-4 h-4" onClick={() => setOpen(true)}/>
-          </div>
       </button>
       <Dialog open={open} onClose={setOpen} className="relative z-10">
         <div className="fixed inset-0" />
@@ -52,9 +45,9 @@ export default function EditApplicantDrawer() {
                     <div className="bg-slate-100 px-4 py-6 sm:px-6">
                       <div className="flex items-start justify-between space-x-3">
                         <div className="space-y-1 pt-8 pb-4 ">
-                          <DialogTitle className="text-3xl font-semibold text-gray-900">Edit Applicant</DialogTitle>
+                          <DialogTitle className="text-3xl font-semibold text-gray-900">New Applicant</DialogTitle>
                           <p className="text-base text-gray-500">
-                            Get started by filling in the information below to edit your applicant.
+                            Get started by filling in the information below to create your new applicant.
                           </p>
                         </div>
                         <div className="flex h-7 items-center">
@@ -81,13 +74,13 @@ export default function EditApplicantDrawer() {
                     </DividerContainer>
                   </div>
                   {/* Action buttons */}
-                  <ActionButton ActionContent="Update" onClick={() => setOpen(false)} />
+                  <ActionButton ActionContent="Create" onClick={() => setOpen(false)} />
                 </form>
               </DialogPanel>
             </div>
           </div>
         </div>
       </Dialog>
-    </>
+    </div>
   )
 }
