@@ -97,9 +97,8 @@ export default function EditInterviewDrawer({ interview, onInterviewUpdated }) {
         onInterviewUpdated()
       }
       
-      // TODO: Add beautiful success notification with TailwindCSS
-      // CN: TODO: 使用 TailwindCSS 添加美观的成功通知
-      alert('Interview updated successfully!')
+      // Success notification will be handled by parent component
+      // CN: 成功通知将由父组件处理
       
     } catch (error) {
       // Error handling

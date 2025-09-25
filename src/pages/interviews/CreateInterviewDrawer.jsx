@@ -37,6 +37,10 @@ export default function CreateInterviewDrawer({ onInterviewCreated }) {
   // Handle form input changes - updates formData state
   // CN: 处理表单输入变化 - 更新 formData 状态
   const handleInputChange = (field, value) => {
+    // Debug: Log input changes
+    // CN: 调试：记录输入变化
+    console.log('Input change:', { field, value, valueType: typeof value })
+    
     setFormData(prev => ({
       ...prev,           // Keep existing fields / CN: 保留现有字段
       [field]: value     // Update the specific field / CN: 更新特定字段
@@ -57,6 +61,16 @@ export default function CreateInterviewDrawer({ onInterviewCreated }) {
 
     try {
       setLoading(true) // Start loading / CN: 开始加载
+
+      // Debug: Log form data before sending
+      // CN: 调试：发送前记录表单数据
+      console.log('📝 Submitting form data:', formData)
+      console.log('📝 Form data type check:', {
+        title: typeof formData.title,
+        job_role: typeof formData.job_role, 
+        description: typeof formData.description,
+        status: typeof formData.status
+      })
 
       // Call API service to create interview
       // CN: 调用 API 服务创建面试
@@ -85,9 +99,8 @@ export default function CreateInterviewDrawer({ onInterviewCreated }) {
         onInterviewCreated()
       }
       
-      // TODO: Add beautiful success notification with TailwindCSS
-      // CN: TODO: 使用 TailwindCSS 添加美观的成功通知
-      alert('Interview created successfully!')
+      // Success notification will be handled by parent component
+      // CN: 成功通知将由父组件处理
       
     } catch (error) {
       // Error handling

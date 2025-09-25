@@ -1,15 +1,15 @@
-const TakeInterviewPage = () => (
-    <div className="mx-auto flex min-h-screen max-w-3xl flex-col gap-6 px-4 py-10">
-      <header className="space-y-2 text-center">
-        <h1 className="text-3xl font-semibold">Interview Session</h1>
-        <p className="text-base-content/70">
-          Candidate-facing layout will guide responses one question at a time.
-        </p>
-      </header>
-      <div className="rounded-lg border border-dashed border-base-300 bg-base-100 p-6 text-sm text-base-content/70">
-        TODO: Build welcome screen, recorder, and completion flow.
+export default function TakeInterviewPage() {
+  return (
+    <div className="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow-sm">
+      <div className="px-4 py-5 sm:px-6">
+        {/* Content goes here */}
+        {/* We use less vertical padding on card headers on desktop than on body sections */}
+      </div>
+      <div className="px-4 py-5 sm:p-6">{/* Content goes here */}</div>
+      <div className="px-4 py-4 sm:px-6">
+        {/* Content goes here */}
+        {/* We use less vertical padding on card footers at all sizes than on headers or body sections */}
       </div>
     </div>
   )
-
-export default TakeInterviewPage
+}

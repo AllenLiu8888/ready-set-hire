@@ -1,3 +1,4 @@
+
 const DashboardPage = () => (
     <section className="space-y-4">
       <header>

@@ -4,10 +4,12 @@ import { useState, useEffect } from 'react';
 import EditInterviewDrawer from './EditInterviewDrawer.jsx';  
 import CreateInterviewDrawer from './CreateInterviewDrawer.jsx';
 import ConfirmAlert from '../../components/shared/alerts/ConfirmAlert.jsx';
+import SuccessAlert from '../../components/shared/alerts/SuccessAlert.jsx';
 
 // Import API services
 // CN: 导入 API 服务
 import { getInterviews, deleteInterview } from '../../services';
+import { storeInterviews } from '../../utils/interviewUtils';
 
 
 
@@ -43,6 +45,11 @@ export default function InterviewsPage() {
   // CN: 删除确认对话框的状态
   const [showConfirm, setShowConfirm] = useState(false) // Control confirm dialog / CN: 控制确认对话框
   const [interviewToDelete, setInterviewToDelete] = useState(null) // Interview to be deleted / CN: 要删除的面试
+  
+  // State for success notification
+  // CN: 成功通知的状态
+  const [successMessage, setSuccessMessage] = useState('') // Success message content / CN: 成功消息内容
+  const [showSuccess, setShowSuccess] = useState(false) // Control success alert visibility / CN: 控制成功提醒的可见性
 
   // Function to fetch interviews from API
   // CN: 从 API 获取面试数据的函数
@@ -58,6 +65,10 @@ export default function InterviewsPage() {
       // Update state with fetched data
       // CN: 用获取的数据更新状态
       setInterviews(data)
+      
+      // Store interviews in localStorage for other components to use
+      // CN: 将面试数据存储到localStorage供其他组件使用
+      storeInterviews(data)
     } catch (err) {
       // Handle errors
       // CN: 处理错误
@@ -68,6 +79,20 @@ export default function InterviewsPage() {
       // CN: 无论成功或失败都停止加载
       setLoading(false)
     }
+  }
+
+  // Function to handle interview creation success
+  // CN: 处理面试创建成功的函数
+  const handleInterviewCreated = () => {
+    fetchInterviews() // Refresh the list / CN: 刷新列表
+    showSuccessNotification('Interview created successfully!') // Show success message / CN: 显示成功消息
+  }
+
+  // Function to handle interview update success
+  // CN: 处理面试更新成功的函数
+  const handleInterviewUpdated = () => {
+    fetchInterviews() // Refresh the list / CN: 刷新列表
+    showSuccessNotification('Interview updated successfully!') // Show success message / CN: 显示成功消息
   }
 
   // Function to handle delete button click - shows confirmation dialog
@@ -83,13 +108,13 @@ export default function InterviewsPage() {
     if (!interviewToDelete) return
 
     try {
-      console.log('🗑️ Deleting interview:', interviewToDelete.id, interviewToDelete.title)
+      console.log('Deleting interview:', interviewToDelete.id, interviewToDelete.title)
       
       // Call API service to delete interview
       // CN: 调用 API 服务删除面试
       await deleteInterview(interviewToDelete.id)
       
-      console.log('✅ Delete API call successful')
+      console.log('Delete API call successful')
       
       // Remove from local state (optimistic update)
       // CN: 从本地状态中移除（乐观更新）
@@ -103,15 +128,13 @@ export default function InterviewsPage() {
       // Show success message
       // CN: 显示成功消息
       console.log('Interview deleted successfully:', interviewToDelete.title)
-      alert('Interview deleted successfully!')
-      // TODO: Add beautiful success notification with TailwindCSS
-      // CN: TODO: 使用 TailwindCSS 添加美观的成功通知
+      showSuccessNotification(`Interview "${interviewToDelete.title}" deleted successfully!`)
       
     } catch (err) {
       // Handle deletion errors with detailed logging
       // CN: 处理删除错误并详细记录
-      console.error('❌ Failed to delete interview:', err)
-      console.error('❌ Interview details:', {
+      console.error('Failed to delete interview:', err)
+      console.error('Interview details:', {
         id: interviewToDelete.id,
         title: interviewToDelete.title,
         error: err.message
@@ -132,6 +155,26 @@ export default function InterviewsPage() {
   const handleCloseConfirm = () => {
     setShowConfirm(false)
     setInterviewToDelete(null)
+  }
+
+  // Function to show success notification
+  // CN: 显示成功通知的函数
+  const showSuccessNotification = (message) => {
+    setSuccessMessage(message)
+    setShowSuccess(true)
+    
+    // Auto-hide after 3 seconds / CN: 3秒后自动隐藏
+    setTimeout(() => {
+      setShowSuccess(false)
+      setSuccessMessage('')
+    }, 3000)
+  }
+
+  // Function to handle success alert close
+  // CN: 处理成功提醒关闭的函数
+  const handleCloseSuccess = () => {
+    setShowSuccess(false)
+    setSuccessMessage('')
   }
 
   // Effect hook to fetch data when component mounts
@@ -177,6 +220,13 @@ export default function InterviewsPage() {
 
   return (
     <div className="px-4 sm:px-6 lg:px-8">
+      {/* Success notification - floating at top / CN: 成功通知 - 浮动在顶部 */}
+      {showSuccess && (
+        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-md">
+          <SuccessAlert message={successMessage} onClose={handleCloseSuccess} />
+        </div>
+      )}
+      
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
           <h1 className="text-3xl font-semibold text-gray-900">Interviews Management</h1>
@@ -195,7 +245,7 @@ export default function InterviewsPage() {
               <RefreshCcw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`}/> Refresh
             </div>
           </button>
-          <CreateInterviewDrawer onInterviewCreated={fetchInterviews} /> {/* Pass callback to refresh after creation / CN: 传递回调以在创建后刷新 */}
+          <CreateInterviewDrawer onInterviewCreated={handleInterviewCreated} /> {/* Pass callback to refresh and show success / CN: 传递回调以刷新并显示成功消息 */}
         </div>  
       </div>
       <div className="mt-8 flow-root">
@@ -268,7 +318,7 @@ export default function InterviewsPage() {
                           {/* Pass interview data to edit drawer / CN: 传递面试数据给编辑抽屉 */}
                           <EditInterviewDrawer 
                             interview={interview} 
-                            onInterviewUpdated={fetchInterviews} 
+                            onInterviewUpdated={handleInterviewUpdated}
                           />
                           {/* Delete button / CN: 删除按钮 */}
                           <button

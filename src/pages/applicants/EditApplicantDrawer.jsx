@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
 import { SquarePen } from 'lucide-react';
 import { X } from 'lucide-react';
@@ -7,17 +7,175 @@ import ActionButton from '../../components/form/ActionButton';
 import DividerContainer from '../../components/form/DividerContainer';
 import SelectInput from '../../components/form/SelectInput';
 
-export default function EditApplicantDrawer() {
-  const [open, setOpen] = useState(false)
-  const Interviews = [
-    { value: '1', label: 'Interview 1', status:'Not Started'},
-    { value: '2', label: 'Interview 2', status:'Not Started'},
-    { value: '3', label: 'Interview 3', status:'Completed'},
-  ]
+// Import API services for updating applicants and getting interviews
+// CN: 导入更新候选人和获取面试的 API 服务
+import { updateApplicant, getInterviews } from '../../services';
+
+export default function EditApplicantDrawer({ applicant, onApplicantUpdated }) {
+  // UI state management
+  // CN: UI 状态管理
+  const [open, setOpen] = useState(false) // Dialog open/close state / CN: 对话框打开/关闭状态
+  const [loading, setLoading] = useState(false) // Form submission loading state / CN: 表单提交加载状态
+  
+  // Form data state - initialized from props or empty
+  // CN: 表单数据状态 - 从 props 初始化或为空
+  const [formData, setFormData] = useState({
+    title: '',              // Applicant title (Mr, Ms, Dr, etc.) / CN: 候选人称谓
+    firstname: '',          // First name / CN: 名字
+    surname: '',            // Last name / CN: 姓氏
+    phone_number: '',       // Phone number / CN: 电话号码
+    email_address: '',      // Email address / CN: 邮箱地址
+    interview_id: '',       // Interview ID / CN: 面试ID
+    interview_status: 'Not Started'  // Interview status / CN: 面试状态
+  })
+
+  // Available interviews from API
+  // CN: 来自 API 的可用面试
+  const [interviews, setInterviews] = useState([]) // Store interviews from API / CN: 存储来自API的面试数据
+  const [interviewsLoading, setInterviewsLoading] = useState(true) // Loading state for interviews / CN: 面试数据加载状态
+
+  // Available interview status options - matches API requirements
+  // CN: 可用的面试状态选项 - 匹配 API 要求
   const InterviewStatus = [
-    { value: 'Not Started', label: 'Not Started' },
-    { value: 'Completed', label: 'Completed' },
+    { value: 'Not Started', label: 'Not Started' },  // New applicant / CN: 新候选人
+    { value: 'Completed', label: 'Completed' },      // Completed interview / CN: 已完成面试
   ]
+
+  // Function to fetch interviews for the dropdown
+  // CN: 获取面试数据用于下拉选择的函数
+  const fetchInterviews = async () => {
+    try {
+      setInterviewsLoading(true)
+      const data = await getInterviews()
+      
+      // Transform interview data to format needed for SelectInput
+      // CN: 将面试数据转换为 SelectInput 需要的格式
+      const interviewOptions = data.map(interview => ({
+        value: interview.id,
+        label: `${interview.title} (${interview.job_role})`
+      }))
+      
+      setInterviews(interviewOptions)
+    } catch (error) {
+      console.error('Failed to fetch interviews:', error)
+      // TODO: Add beautiful error notification
+      // CN: TODO: 添加美观的错误通知
+    } finally {
+      setInterviewsLoading(false)
+    }
+  }
+
+  // Effect to populate form when applicant prop changes
+  // CN: 当 applicant prop 变化时填充表单的副作用
+  useEffect(() => {
+    if (applicant) {
+      setFormData({
+        title: applicant.title || '',
+        firstname: applicant.firstname || '',
+        surname: applicant.surname || '',
+        phone_number: applicant.phone_number || '',
+        email_address: applicant.email_address || '',
+        interview_id: applicant.interview_id || '',
+        interview_status: applicant.interview_status || 'Not Started'
+      })
+    }
+  }, [applicant]) // Re-run when applicant prop changes / CN: 当 applicant prop 变化时重新运行
+
+  // Effect to fetch interviews when component mounts
+  // CN: 组件挂载时获取面试数据的副作用
+  useEffect(() => {
+    fetchInterviews()
+  }, [])
+
+  // Handle form input changes - updates formData state
+  // CN: 处理表单输入变化 - 更新 formData 状态
+  const handleInputChange = (field, value) => {
+    setFormData(prev => ({
+      ...prev,           // Keep existing fields / CN: 保留现有字段
+      [field]: value     // Update the specific field / CN: 更新特定字段
+    }))
+  }
+
+  // Handle form submission - updates existing applicant via API
+  // CN: 处理表单提交 - 通过 API 更新现有候选人
+  const handleSubmit = async (e) => {
+    e.preventDefault() // Prevent default form submission / CN: 阻止默认表单提交
+
+    // Ensure we have an applicant to update
+    // CN: 确保我们有要更新的候选人
+    if (!applicant || !applicant.id) {
+      alert('No applicant selected for editing')
+      return
+    }
+
+    // Basic validation - ensure required fields are filled
+    // CN: 基础验证 - 确保必填字段已填写
+    if (!formData.title.trim() || !formData.firstname.trim() || !formData.surname.trim() ||
+        !formData.phone_number.trim() || !formData.email_address.trim()) {
+      alert('Please fill in all required fields: Title, First Name, Last Name, Phone Number, and Email Address')
+      return
+    }
+
+    // Basic email validation
+    // CN: 基础邮箱验证
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(formData.email_address.trim())) {
+      alert('Please enter a valid email address')
+      return
+    }
+
+    try {
+      setLoading(true) // Start loading / CN: 开始加载
+
+      // Call API service to update applicant
+      // CN: 调用 API 服务更新候选人
+      const updatedApplicant = await updateApplicant(applicant.id, formData)
+      
+      // Success handling
+      // CN: 成功处理
+      console.log('Applicant updated successfully:', updatedApplicant)
+      
+      // Close the dialog
+      // CN: 关闭对话框
+      setOpen(false)
+      
+      // Notify parent component to refresh data
+      // CN: 通知父组件刷新数据
+      if (onApplicantUpdated) {
+        onApplicantUpdated()
+      }
+      
+      // Success notification will be handled by parent component
+      // CN: 成功通知将由父组件处理
+      
+    } catch (error) {
+      // Error handling
+      // CN: 错误处理
+      console.error('Failed to update applicant:', error)
+      
+      // TODO: Add beautiful error notification with TailwindCSS  
+      // CN: TODO: 使用 TailwindCSS 添加美观的错误通知
+      alert('Failed to update applicant. Please try again.')
+      
+    } finally {
+      setLoading(false) // Always stop loading / CN: 始终停止加载
+    }
+  }
+
+  // Handle dialog close - prevent close during submission
+  // CN: 处理对话框关闭 - 提交期间阻止关闭
+  const handleClose = () => {
+    if (!loading) { // Only allow close if not submitting / CN: 只有在非提交状态时才允许关闭
+      setOpen(false)
+    }
+  }
+
+  // Don't render edit button if no applicant provided
+  // CN: 如果没有提供候选人数据则不渲染编辑按钮
+  if (!applicant) {
+    return null
+  }
+
   return (
     <>
       {/* <button
@@ -35,7 +193,7 @@ export default function EditApplicantDrawer() {
             <SquarePen className="w-4 h-4" onClick={() => setOpen(true)}/>
           </div>
       </button>
-      <Dialog open={open} onClose={setOpen} className="relative z-10">
+      <Dialog open={open} onClose={handleClose} className="relative z-10">
         <div className="fixed inset-0" />
 
         <div className="fixed inset-0 overflow-hidden">
@@ -45,7 +203,7 @@ export default function EditApplicantDrawer() {
                 transition
                 className="shadow-xl/30 pointer-events-auto w-screen max-w-4xl transform transition duration-500 ease-in-out data-closed:translate-x-full sm:duration-700"
               >
-                <form className="relative flex h-full flex-col overflow-y-auto bg-white shadow-xl">
+                <form onSubmit={handleSubmit} className="relative flex h-full flex-col overflow-y-auto bg-white shadow-xl">
                   {/* Form Container */}
                   <div className="flex-1">
                     {/* Header */}
@@ -60,8 +218,9 @@ export default function EditApplicantDrawer() {
                         <div className="flex h-7 items-center">
                           <button
                             type="button"
-                            onClick={() => setOpen(false)}
-                            className="relative rounded-md text-gray-400 hover:text-gray-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                            onClick={handleClose} // Use handleClose instead of setOpen directly / CN: 使用 handleClose 而不是直接 setOpen
+                            disabled={loading} // Disable close button during submission / CN: 提交期间禁用关闭按钮
+                            className="relative rounded-md text-gray-400 hover:text-gray-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:opacity-50"
                           >
                             <span className="absolute -inset-2.5" />
                             <span className="sr-only">Close panel</span>
@@ -71,17 +230,96 @@ export default function EditApplicantDrawer() {
                       </div>
                     </div>
                     <DividerContainer>
-                      <TextInput label="Title" placeholder="Mr, Ms, Dr" type="text" id="applicant-title" name="applicant-title" />
-                      <TextInput label="First Name" placeholder="First Name" type="text" id="applicant-firstname" name="applicant-firstname" />
-                      <TextInput label="Last Name" placeholder="Last Name" type="text" id="applicant-lastname" name="applicant-lastname" />
-                      <TextInput label="Phone Number" placeholder="Phone Number" type="text" id="applicant-phone-number" name="applicant-phone-number" />
-                      <TextInput label="Email Address" placeholder="Email Address" type="text" id="applicant-email-address" name="applicant-email-address" />
-                      <SelectInput label="Interview" placeholder="Select Interview" id="applicant-interview" name="applicant-interview" options={Interviews} />
-                      <SelectInput label="Interview Status" placeholder="Select Interview Status" id="applicant-interview-status" name="applicant-interview-status" options={InterviewStatus} />
+                      {/* Title input - required field / CN: 称谓输入 - 必填字段 */}
+                      <TextInput 
+                        label="Title" 
+                        placeholder="Mr, Ms, Dr" 
+                        type="text" 
+                        id="applicant-title" 
+                        name="applicant-title"
+                        value={formData.title}
+                        onChange={(e) => handleInputChange('title', e.target.value)}
+                        required
+                      />
+                      
+                      {/* First name input - required field / CN: 名字输入 - 必填字段 */}
+                      <TextInput 
+                        label="First Name" 
+                        placeholder="First Name" 
+                        type="text" 
+                        id="applicant-firstname" 
+                        name="applicant-firstname"
+                        value={formData.firstname}
+                        onChange={(e) => handleInputChange('firstname', e.target.value)}
+                        required
+                      />
+                      
+                      {/* Last name input - required field / CN: 姓氏输入 - 必填字段 */}
+                      <TextInput 
+                        label="Last Name" 
+                        placeholder="Last Name" 
+                        type="text" 
+                        id="applicant-lastname" 
+                        name="applicant-lastname"
+                        value={formData.surname}
+                        onChange={(e) => handleInputChange('surname', e.target.value)}
+                        required
+                      />
+                      
+                      {/* Phone number input - required field / CN: 电话号码输入 - 必填字段 */}
+                      <TextInput 
+                        label="Phone Number" 
+                        placeholder="+61 xxx xxx xxx" 
+                        type="tel" 
+                        id="applicant-phone-number" 
+                        name="applicant-phone-number"
+                        value={formData.phone_number}
+                        onChange={(e) => handleInputChange('phone_number', e.target.value)}
+                      />
+                      
+                      {/* Email address input - required field / CN: 邮箱地址输入 - 必填字段 */}
+                      <TextInput 
+                        label="Email Address" 
+                        placeholder="example@email.com" 
+                        type="email" 
+                        id="applicant-email-address" 
+                        name="applicant-email-address"
+                        value={formData.email_address}
+                        onChange={(e) => handleInputChange('email_address', e.target.value)}
+                        required
+                      />
+                      
+                      {/* Interview select - can be changed during editing / CN: 面试选择 - 编辑时可更改 */}
+                      <SelectInput 
+                        label="Interview" 
+                        placeholder={interviewsLoading ? "Loading interviews..." : "Select Interview"} 
+                        id="applicant-interview" 
+                        name="applicant-interview" 
+                        options={interviews}
+                        value={formData.interview_id}
+                        onChange={(value) => handleInputChange('interview_id', value)}
+                        disabled={interviewsLoading}
+                      />
+                      
+                      {/* Interview status select - can be changed during editing / CN: 面试状态选择 - 编辑时可更改 */}
+                      <SelectInput 
+                        label="Interview Status" 
+                        placeholder="Select Interview Status" 
+                        id="applicant-interview-status" 
+                        name="applicant-interview-status" 
+                        options={InterviewStatus}
+                        value={formData.interview_status}
+                        onChange={(value) => handleInputChange('interview_status', value)}
+                        required
+                      />
                     </DividerContainer>
                   </div>
                   {/* Action buttons */}
-                  <ActionButton ActionContent="Update" onClick={() => setOpen(false)} />
+                  <ActionButton 
+                    ActionContent={loading ? "Updating..." : "Update"} // Dynamic button text / CN: 动态按钮文本
+                    type="submit" // Make it a submit button / CN: 设为提交按钮
+                    disabled={loading || interviewsLoading} // Disable during submission or while loading interviews / CN: 提交期间或加载面试时禁用
+                  />
                 </form>
               </DialogPanel>
             </div>
