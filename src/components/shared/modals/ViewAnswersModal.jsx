@@ -86,11 +86,24 @@ export default function ViewAnswersModal({ applicant, onClose }) {
   }
 
   /**
-   * Get answer for a specific question
+   * Get answer for a specific question with status-aware messaging
    */
   const getAnswerForQuestion = (questionId) => {
     const answer = answers.find(ans => ans.question_id === questionId)
-    return answer?.answer || 'No answer provided'
+    
+    if (answer?.answer) {
+      return answer.answer
+    }
+    
+    // Return status-appropriate message when no answer exists
+    switch (applicant.interview_status) {
+      case 'Not Started':
+        return 'Interview not started yet - no answer available'
+      case 'Completed':
+        return 'No answer provided for this question'
+      default:
+        return 'No answer provided'
+    }
   }
 
   // =============================================================================
@@ -215,11 +228,18 @@ export default function ViewAnswersModal({ applicant, onClose }) {
                         <FileText className="w-4 h-4 text-gray-400" />
                         <h4 className="text-sm font-medium text-gray-900">Answer:</h4>
                       </div>
-                      <div className="bg-gray-50 rounded-md p-3">
-                        <p className="text-gray-700 whitespace-pre-wrap">
-                          {getAnswerForQuestion(question.id)}
-                        </p>
-                      </div>
+                      {(() => {
+                        const answer = answers.find(ans => ans.question_id === question.id)
+                        const hasAnswer = answer?.answer
+                        
+                        return (
+                          <div className={`rounded-md p-3 ${hasAnswer ? 'bg-gray-50' : 'bg-yellow-50 border border-yellow-200'}`}>
+                            <p className={`whitespace-pre-wrap ${hasAnswer ? 'text-gray-700' : 'text-yellow-700 italic'}`}>
+                              {getAnswerForQuestion(question.id)}
+                            </p>
+                          </div>
+                        )
+                      })()}
                     </div>
                   </div>
                 ))}

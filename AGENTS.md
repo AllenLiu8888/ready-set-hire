@@ -13,7 +13,7 @@
 
 ## 项目结构
 - `src/main.jsx` 挂载应用；`src/App.jsx` 管理全局布局与路由。
-- 共享组件放在 `src/components/`；静态资源位于 `src/assets/`；公开静态文件置于 `public/`。
+- 共享组件放在 `src/components/`；静态资源位于 `src/assets/`。
 - `src/server/app.js` 仅作 API 调用范例，不要提交真实凭证。
 
 ## 技术栈与 UI 约束

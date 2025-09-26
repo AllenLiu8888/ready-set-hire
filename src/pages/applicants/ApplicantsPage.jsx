@@ -311,20 +311,18 @@ export default function ApplicantsPage() {
                           </span>
                         </td>
                         <td className="py-4 px-3 text-center text-sm font-medium whitespace-nowrap">  
-                          {/* View answers button (Rubric 1.8) - only show for completed interviews */}
-                          {applicant.interview_status === 'Completed' && (
-                            <button
-                              type="button"
-                              onClick={() => handleViewAnswers(applicant)}
-                              className="rounded-sm bg-green-50 px-2 py-1 text-sm font-semibold text-green-600 shadow-xs hover:bg-green-100 mr-2"
-                              title="View interview questions and answers"
-                            >
-                              <div className='flex items-center gap-2'>
-                                <Eye className="w-4 h-4"/>
-                                View Answers
-                              </div>
-                            </button>
-                          )}
+                          {/* View answers button (Rubric 1.8) - available for all applicants */}
+                          <button
+                            type="button"
+                            onClick={() => handleViewAnswers(applicant)}
+                            className="rounded-sm bg-green-50 px-2 py-1 text-sm font-semibold text-green-600 shadow-xs hover:bg-green-100 mr-2"
+                            title={`View interview questions and answers (${applicant.interview_status})`}
+                          >
+                            <div className='flex items-center gap-2'>
+                              <Eye className="w-4 h-4"/>
+                              View Answers
+                            </div>
+                          </button>
                           
                           {/* Copy interview link button */}
                           <button

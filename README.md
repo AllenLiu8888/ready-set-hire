@@ -82,6 +82,7 @@ This project incorporates various technologies and tools across different catego
 - **React Speech Recognition**: Voice recognition and transcription functionality for candidate interviews
 - **Tailwind Variants**: Managing different styles for various component states and variants
 - **Headless UI**: Accessible, unstyled UI components for complex interactions(For TailwindCSS PLUS)
+- **Cloudinary**: External image hosting service used for application logo and static assets
 
 ### AI Usage
 - **AI Model Integration**: The system connects to OpenAI LLM models, utilizing artificial intelligence services to automatically generate interview questions based on job roles and requirements
@@ -207,10 +208,11 @@ ready-set-hire/
 │   ├── utils/              # Utility functions
 │   ├── App.jsx             # Main application component
 │   └── main.jsx            # Application entry point
-├── public/                 # Static assets
-├── .env.local              # Environment configuration
+├── .env.local              # Environment configuration (create this)
 └── package.json            # Project dependencies
 ```
+
+> **Note**: This project uses Cloudinary for external image hosting (favicon, logos), eliminating the need for a `public/` directory for static assets.
 
 ## 📜 Available Scripts
 
