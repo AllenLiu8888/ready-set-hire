@@ -47,7 +47,7 @@ export default function TakeInterviewPage() {
   const [applicant, setApplicant] = useState(null) // Applicant data
   const [questions, setQuestions] = useState([]) // Interview questions
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0) // Current question index
-  const [answers, setAnswers] = useState({}) // Store answers for each question
+  // Rubric 1.6: Text answers removed - voice only
   const [loading, setLoading] = useState(true) // Loading state
   const [error, setError] = useState(null) // Error state
 
@@ -96,20 +96,18 @@ export default function TakeInterviewPage() {
       
       setQuestions(filteredQuestions)
 
-      // Initialize recording states and answers
+      // Initialize recording states for each question (voice only)
       const initialRecordingStates = {}
-      const initialAnswers = {}
       filteredQuestions.forEach(question => {
         initialRecordingStates[question.id] = {
           isRecording: false,
           isPlaying: false,
           hasRecording: false,
-          audioBlob: null
+          audioBlob: null,
+          transcriptText: '' // Store voice transcript
         }
-        initialAnswers[question.id] = ''
       })
       setRecordingStates(initialRecordingStates)
-      setAnswers(initialAnswers)
 
     } catch (err) {
       console.error('Failed to fetch interview data:', err)
@@ -130,12 +128,16 @@ export default function TakeInterviewPage() {
   }, [applicantId, fetchInterviewData])
 
   // Effect to handle speech recognition transcript
+  // Update speech recognition transcript in real-time
   useEffect(() => {
     if (currentRecordingQuestion && transcript) {
-      // Update the answer with the transcript
-      setAnswers(prev => ({
+      // Update the recording state with the transcript (voice only)
+      setRecordingStates(prev => ({
         ...prev,
-        [currentRecordingQuestion]: transcript
+        [currentRecordingQuestion]: {
+          ...prev[currentRecordingQuestion],
+          transcriptText: transcript
+        }
       }))
     }
   }, [transcript, currentRecordingQuestion])
@@ -144,13 +146,7 @@ export default function TakeInterviewPage() {
   // Event Handlers and User Interactions
   // =============================================================================
 
-  // Handle answer text change
-  const handleAnswerChange = (questionId, value) => {
-    setAnswers(prev => ({
-      ...prev,
-      [questionId]: value
-    }))
-  }
+  // Rubric 1.6: Text input handler removed - voice only
 
   // Handle recording functions using Speech Recognition API
   const handleStartRecording = async (questionId) => {
@@ -277,11 +273,7 @@ export default function TakeInterviewPage() {
   }
 
   // Navigate to previous question
-  const handlePreviousQuestion = () => {
-    if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex(prev => prev - 1)
-    }
-  }
+  // Rubric 1.7: Previous navigation removed - only Next button allowed
 
   // Submit all answers
   const handleSubmitInterview = async () => {
@@ -289,46 +281,35 @@ export default function TakeInterviewPage() {
       setSubmitting(true)
       console.log('Starting interview submission...')
 
-      // Check if there's at least one answer or recording
-      const hasAnyAnswer = questions.some(question => {
+      // Rubric 1.6: Check if there's voice recording for each question (mandatory)
+      const hasAllVoiceAnswers = questions.every(question => {
         const recordingState = recordingStates[question.id]
-        const textAnswer = answers[question.id]
-        return textAnswer?.trim() || recordingState?.transcriptText?.trim()
+        return recordingState?.transcriptText?.trim()
       })
 
-      if (!hasAnyAnswer) {
-        alert('Please provide at least one answer before submitting.')
+      if (!hasAllVoiceAnswers) {
+        alert('Please provide voice responses for all questions before submitting. Text input is not allowed.')
         return
       }
 
-      // Submit answers for each question that has content
+      // Submit voice answers for each question (Rubric 1.6: voice only)
       let submittedCount = 0
       for (const question of questions) {
         const recordingState = recordingStates[question.id]
-        const textAnswer = answers[question.id]?.trim()
         const voiceAnswer = recordingState?.transcriptText?.trim()
         
-        // Skip questions with no answers
-        if (!textAnswer && !voiceAnswer) {
-          console.log(`Skipping question ${question.id} - no answer provided`)
+        // All questions must have voice answers as per Rubric 1.6
+        if (!voiceAnswer) {
+          console.error(`Missing voice answer for question ${question.id}`)
           continue
         }
 
-        // Combine written answer with speech transcript
-        let combinedAnswer = ''
-        if (textAnswer && voiceAnswer) {
-          combinedAnswer = `${textAnswer}\n\n[Voice Recording Transcript]: ${voiceAnswer}`
-        } else if (textAnswer) {
-          combinedAnswer = textAnswer
-        } else if (voiceAnswer) {
-          combinedAnswer = `[Voice Recording Transcript]: ${voiceAnswer}`
-        }
-
+        // Rubric 1.6 & 1.7: Only voice answers are submitted
         const answerData = {
           applicant_id: parseInt(applicantId), // Ensure numeric ID
           interview_id: applicant.interview_id, // Required by API docs
           question_id: question.id,
-          answer: combinedAnswer, // Correct field name according to API docs
+          answer: voiceAnswer, // Only voice transcript as per Rubric 1.6
           // Note: API docs don't include audio_url field, so we'll omit it for now
         }
 
@@ -606,48 +587,40 @@ export default function TakeInterviewPage() {
               </div>
             )}
 
-            {/* Text Answer */}
+            {/* Rubric 1.6 & 1.7: Speech-only input required */}
             <div className="mb-8">
-              <label htmlFor={`answer-${currentQuestion?.id}`} className="block text-sm font-medium text-gray-900 mb-3">
-                Written Response (Optional)
-              </label>
-              <textarea
-                id={`answer-${currentQuestion?.id}`}
-                rows={6}
-                className="block w-full rounded-md border-0 py-3 px-4 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                placeholder="You can provide additional written notes here..."
-                value={answers[currentQuestion?.id] || ''}
-                onChange={(e) => handleAnswerChange(currentQuestion.id, e.target.value)}
-              />
-              <p className="mt-2 text-xs text-gray-500">
-                You can provide written notes in addition to or instead of voice responses.
-              </p>
+              <div className="bg-blue-50 border border-blue-200 rounded-md p-4">
+                <div className="flex items-center space-x-2 mb-2">
+                  <Mic className="w-5 h-5 text-blue-600" />
+                  <h3 className="text-sm font-medium text-blue-900">Voice Response Required</h3>
+                </div>
+                <p className="text-sm text-blue-700">
+                  Please use the voice recording feature above to answer this question. 
+                  Text input is not available for interview responses.
+                </p>
+              </div>
             </div>
           </div>
 
-          {/* Navigation */}
-          <div className="bg-gray-50 px-6 py-4 flex justify-between items-center">
-            <button
-              onClick={handlePreviousQuestion}
-              disabled={currentQuestionIndex === 0}
-              className="rounded-md bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Previous
-            </button>
-
+          {/* Navigation - Rubric 1.7: Only Next button allowed */}
+          <div className="bg-gray-50 px-6 py-4 flex justify-end items-center">
+            {/* Only Next button as per Rubric 1.7 requirement */}
             <div className="flex space-x-3">
               {currentQuestionIndex < questions.length - 1 ? (
                 <button
                   onClick={handleNextQuestion}
-                  className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  disabled={!currentRecordingState.transcriptText} // Require speech input to proceed
+                  className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                  title={!currentRecordingState.transcriptText ? "Please record your voice response before proceeding" : ""}
                 >
                   Next Question
                 </button>
               ) : (
                 <button
                   onClick={handleSubmitInterview}
-                  disabled={submitting}
+                  disabled={submitting || !currentRecordingState.transcriptText} // Require speech input to submit
                   className="rounded-md bg-green-600 px-6 py-2 text-sm font-semibold text-white shadow-xs hover:bg-green-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                  title={!currentRecordingState.transcriptText ? "Please record your voice response before submitting" : ""}
                 >
                   {submitting ? 'Submitting...' : 'Submit Interview'}
                 </button>

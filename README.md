@@ -314,3 +314,9 @@ This project is a COMP2140 course assignment project.
 ---
 
 *Last Updated: 2025-09-26*
+
+
+TDDO:
+1. takeinterview部分所有代码
+2. AI生成部分所有代码
+3. 

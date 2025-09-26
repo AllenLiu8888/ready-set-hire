@@ -6,12 +6,13 @@
 // =============================================================================
 
 import { tv } from 'tailwind-variants';
-import { RefreshCcw, Trash2, Link, Users } from 'lucide-react';
+import { RefreshCcw, Trash2, Link, Users, Eye } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import CreateApplicantDrawer from './CreateApplicantDrawer.jsx';
 import EditApplicantDrawer from './EditApplicantDrawer.jsx';
 import ConfirmAlert from '../../components/shared/alerts/ConfirmAlert.jsx';
 import SuccessAlert from '../../components/shared/alerts/SuccessAlert.jsx';
+import ViewAnswersModal from '../../components/shared/modals/ViewAnswersModal.jsx';
 
 // Import API services and utilities
 import { getApplicants, deleteApplicant } from '../../services';
@@ -48,6 +49,10 @@ export default function ApplicantsPage() {
   // State for success notification
   const [successMessage, setSuccessMessage] = useState('') // Success message content
   const [showSuccess, setShowSuccess] = useState(false) // Control success alert visibility
+
+  // State for view answers modal (Rubric 1.8)
+  const [showViewAnswers, setShowViewAnswers] = useState(false) // Control view answers modal
+  const [selectedApplicant, setSelectedApplicant] = useState(null) // Selected applicant for viewing answers
   // Function to fetch applicants from API
   const fetchApplicants = async () => {
     try {
@@ -164,6 +169,18 @@ export default function ApplicantsPage() {
       console.error('Failed to copy link:', err)
       alert('Failed to copy link to clipboard')
     })
+  }
+
+  // Function to handle view answers button click (Rubric 1.8)
+  const handleViewAnswers = (applicant) => {
+    setSelectedApplicant(applicant)
+    setShowViewAnswers(true)
+  }
+
+  // Function to close view answers modal
+  const handleCloseViewAnswers = () => {
+    setShowViewAnswers(false)
+    setSelectedApplicant(null)
   }
 
   // Effect hook to fetch data when component mounts
@@ -294,6 +311,21 @@ export default function ApplicantsPage() {
                           </span>
                         </td>
                         <td className="py-4 px-3 text-center text-sm font-medium whitespace-nowrap">  
+                          {/* View answers button (Rubric 1.8) - only show for completed interviews */}
+                          {applicant.interview_status === 'Completed' && (
+                            <button
+                              type="button"
+                              onClick={() => handleViewAnswers(applicant)}
+                              className="rounded-sm bg-green-50 px-2 py-1 text-sm font-semibold text-green-600 shadow-xs hover:bg-green-100 mr-2"
+                              title="View interview questions and answers"
+                            >
+                              <div className='flex items-center gap-2'>
+                                <Eye className="w-4 h-4"/>
+                                View Answers
+                              </div>
+                            </button>
+                          )}
+                          
                           {/* Copy interview link button */}
                           <button
                             type="button"
@@ -341,6 +373,14 @@ export default function ApplicantsPage() {
           onConfirm={handleConfirmDelete}
           title="Delete Applicant"
           message={`Are you sure you want to delete "${applicantToDelete?.firstname} ${applicantToDelete?.surname}"? This action cannot be undone.`}
+        />
+      )}
+
+      {/* View Answers Modal (Rubric 1.8) */}
+      {showViewAnswers && selectedApplicant && (
+        <ViewAnswersModal
+          applicant={selectedApplicant}
+          onClose={handleCloseViewAnswers}
         />
       )}
     </div>

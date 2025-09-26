@@ -185,25 +185,16 @@ const DashboardPage = () => {
       {/* Dashboard Header Section */}
       {/* =================================================================== */}
       <div className="border-b border-gray-200 pb-5">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-semibold text-gray-900">Dashboard</h1>
-            <p className="mt-2 text-sm text-gray-500">
-              System overview and statistics
-              {lastUpdated && (
+        <div className="sm:flex sm:items-center">
+            <div className="sm:flex-auto">
+            <h1 className="text-4xl font-semibold text-gray-900">Dashboard</h1>
+            <p className="mt-2 text-base text-gray-700">
+                System overview and statistics
                 <span className="ml-2 text-gray-400">
-                  • Last updated: {lastUpdated.toLocaleTimeString()}
+                    • Last updated: {lastUpdated.toLocaleTimeString()}
                 </span>
-              )}
             </p>
-          </div>
-          <button
-            onClick={fetchDashboardData}
-            className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
-          >
-            <RefreshCw className="mr-2 h-4 w-4" />
-            Refresh
-          </button>
+            </div>
         </div>
       </div>
 
