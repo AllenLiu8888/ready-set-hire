@@ -81,7 +81,7 @@ This project incorporates various technologies and tools across different catego
 - **Lucide React**: Icon library providing consistent iconography across the application
 - **React Speech Recognition**: Voice recognition and transcription functionality for candidate interviews
 - **Tailwind Variants**: Managing different styles for various component states and variants
-- **Headless UI**: Accessible, unstyled UI components for complex interactions
+- **Headless UI**: Accessible, unstyled UI components for complex interactions(For TailwindCSS PLUS)
 
 ### AI Usage
 - **AI Model Integration**: The system connects to OpenAI LLM models, utilizing artificial intelligence services to automatically generate interview questions based on job roles and requirements
@@ -89,9 +89,9 @@ This project incorporates various technologies and tools across different catego
 - **Learning Assistance**: When encountering difficult concepts, leveraged AI tools for explanation and learning support
 - **Development Assistance**: Throughout the development process, utilized AI tools to assist with code documentation writing, debugging, and optimization work, providing significant help in selecting various libraries
 
-All AI-generated content is reviewed and can be edited by administrators before use in actual interviews.
+All AI-generated content is reviewed by administrators.
 
-## ⚖️ Speech-to-Text in Hiring Interviews — Responsible AI & Accessibility
+## ⚖️ Speech-to-Text in Hiring Interviews — Responsible AI & Accessibility (Rubric 5.1 Research Question)
 
 ### 1. Bias & Fairness
 
