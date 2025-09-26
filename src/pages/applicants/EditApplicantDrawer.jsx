@@ -1,10 +1,8 @@
 // =============================================================================
 // Edit Applicant Drawer - Modal form for editing existing interview candidates
-// CN: 编辑候选人抽屉 - 编辑现有面试候选人的模态表单
 // =============================================================================
 // This component provides a modal interface for editing existing applicants,
 // including form validation, data pre-filling, and API integration for updates.
-// CN: 该组件提供编辑现有候选人的模态界面，包括表单验证、数据预填充和API集成更新。
 // =============================================================================
 
 import { useState, useEffect } from 'react'
@@ -17,48 +15,41 @@ import DividerContainer from '../../components/form/DividerContainer';
 import SelectInput from '../../components/form/SelectInput';
 
 // Import API services for updating applicants and getting interviews
-// CN: 导入更新候选人和获取面试的 API 服务
 import { updateApplicant, getInterviews } from '../../services';
 
 export default function EditApplicantDrawer({ applicant, onApplicantUpdated }) {
   // UI state management
-  // CN: UI 状态管理
-  const [open, setOpen] = useState(false) // Dialog open/close state / CN: 对话框打开/关闭状态
-  const [loading, setLoading] = useState(false) // Form submission loading state / CN: 表单提交加载状态
+  const [open, setOpen] = useState(false) // Dialog open/close state
+  const [loading, setLoading] = useState(false) // Form submission loading state
   
   // Form data state - initialized from props or empty
-  // CN: 表单数据状态 - 从 props 初始化或为空
   const [formData, setFormData] = useState({
-    title: '',              // Applicant title (Mr, Ms, Dr, etc.) / CN: 候选人称谓
-    firstname: '',          // First name / CN: 名字
-    surname: '',            // Last name / CN: 姓氏
-    phone_number: '',       // Phone number / CN: 电话号码
-    email_address: '',      // Email address / CN: 邮箱地址
-    interview_id: '',       // Interview ID / CN: 面试ID
-    interview_status: 'Not Started'  // Interview status / CN: 面试状态
+    title: '',              // Applicant title (Mr, Ms, Dr, etc.)
+    firstname: '',          // First name
+    surname: '',            // Last name
+    phone_number: '',       // Phone number
+    email_address: '',      // Email address
+    interview_id: '',       // Interview ID
+    interview_status: 'Not Started'  // Interview status
   })
 
   // Available interviews from API
-  // CN: 来自 API 的可用面试
-  const [interviews, setInterviews] = useState([]) // Store interviews from API / CN: 存储来自API的面试数据
-  const [interviewsLoading, setInterviewsLoading] = useState(true) // Loading state for interviews / CN: 面试数据加载状态
+  const [interviews, setInterviews] = useState([]) // Store interviews from API
+  const [interviewsLoading, setInterviewsLoading] = useState(true) // Loading state for interviews
 
   // Available interview status options - matches API requirements
-  // CN: 可用的面试状态选项 - 匹配 API 要求
   const InterviewStatus = [
-    { value: 'Not Started', label: 'Not Started' },  // New applicant / CN: 新候选人
-    { value: 'Completed', label: 'Completed' },      // Completed interview / CN: 已完成面试
+    { value: 'Not Started', label: 'Not Started' },  // New applicant
+    { value: 'Completed', label: 'Completed' },      // Completed interview
   ]
 
   // Function to fetch interviews for the dropdown
-  // CN: 获取面试数据用于下拉选择的函数
   const fetchInterviews = async () => {
     try {
       setInterviewsLoading(true)
       const data = await getInterviews()
       
       // Transform interview data to format needed for SelectInput
-      // CN: 将面试数据转换为 SelectInput 需要的格式
       const interviewOptions = data.map(interview => ({
         value: interview.id,
         label: `${interview.title} (${interview.job_role})`
@@ -68,14 +59,12 @@ export default function EditApplicantDrawer({ applicant, onApplicantUpdated }) {
     } catch (error) {
       console.error('Failed to fetch interviews:', error)
       // TODO: Add beautiful error notification
-      // CN: TODO: 添加美观的错误通知
     } finally {
       setInterviewsLoading(false)
     }
   }
 
   // Effect to populate form when applicant prop changes
-  // CN: 当 applicant prop 变化时填充表单的副作用
   useEffect(() => {
     if (applicant) {
       setFormData({
@@ -88,44 +77,38 @@ export default function EditApplicantDrawer({ applicant, onApplicantUpdated }) {
         interview_status: applicant.interview_status || 'Not Started'
       })
     }
-  }, [applicant]) // Re-run when applicant prop changes / CN: 当 applicant prop 变化时重新运行
+  }, [applicant]) // Re-run when applicant prop changes
 
   // Effect to fetch interviews when component mounts
-  // CN: 组件挂载时获取面试数据的副作用
   useEffect(() => {
     fetchInterviews()
   }, [])
 
   // Handle form input changes - updates formData state
-  // CN: 处理表单输入变化 - 更新 formData 状态
   const handleInputChange = (field, value) => {
     setFormData(prev => ({
-      ...prev,           // Keep existing fields / CN: 保留现有字段
-      [field]: value     // Update the specific field / CN: 更新特定字段
+      ...prev,           // Keep existing fields
+      [field]: value     // Update the specific field
     }))
   }
 
   // Handle form submission - updates existing applicant via API
-  // CN: 处理表单提交 - 通过 API 更新现有候选人
   const handleSubmit = async (e) => {
-    e.preventDefault() // Prevent default form submission / CN: 阻止默认表单提交
+    e.preventDefault() // Prevent default form submission
 
     // Ensure we have an applicant to update
-    // CN: 确保我们有要更新的候选人
     if (!applicant || !applicant.id) {
       alert('No applicant selected for editing')
       return
     }
 
     // Basic validation - ensure required fields are filled
-    // CN: 基础验证 - 确保必填字段已填写
     if (!formData.title.trim() || !formData.firstname.trim() || !formData.email_address.trim()) {
       alert('Please fill in all required fields: Title, First Name, Last Name, Phone Number, and Email Address')
       return
     }
 
     // Basic email validation
-    // CN: 基础邮箱验证
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(formData.email_address.trim())) {
       alert('Please enter a valid email address')
@@ -133,53 +116,44 @@ export default function EditApplicantDrawer({ applicant, onApplicantUpdated }) {
     }
 
     try {
-      setLoading(true) // Start loading / CN: 开始加载
+      setLoading(true) // Start loading
 
       // Call API service to update applicant
-      // CN: 调用 API 服务更新候选人
       const updatedApplicant = await updateApplicant(applicant.id, formData)
       
       // Success handling
-      // CN: 成功处理
       console.log('Applicant updated successfully:', updatedApplicant)
       
       // Close the dialog
-      // CN: 关闭对话框
       setOpen(false)
       
       // Notify parent component to refresh data
-      // CN: 通知父组件刷新数据
       if (onApplicantUpdated) {
         onApplicantUpdated()
       }
       
       // Success notification will be handled by parent component
-      // CN: 成功通知将由父组件处理
       
     } catch (error) {
       // Error handling
-      // CN: 错误处理
       console.error('Failed to update applicant:', error)
       
       // TODO: Add beautiful error notification with TailwindCSS  
-      // CN: TODO: 使用 TailwindCSS 添加美观的错误通知
       alert('Failed to update applicant. Please try again.')
       
     } finally {
-      setLoading(false) // Always stop loading / CN: 始终停止加载
+      setLoading(false) // Always stop loading
     }
   }
 
   // Handle dialog close - prevent close during submission
-  // CN: 处理对话框关闭 - 提交期间阻止关闭
   const handleClose = () => {
-    if (!loading) { // Only allow close if not submitting / CN: 只有在非提交状态时才允许关闭
+    if (!loading) { // Only allow close if not submitting
       setOpen(false)
     }
   }
 
   // Don't render edit button if no applicant provided
-  // CN: 如果没有提供候选人数据则不渲染编辑按钮
   if (!applicant) {
     return null
   }
@@ -226,8 +200,8 @@ export default function EditApplicantDrawer({ applicant, onApplicantUpdated }) {
                         <div className="flex h-7 items-center">
                           <button
                             type="button"
-                            onClick={handleClose} // Use handleClose instead of setOpen directly / CN: 使用 handleClose 而不是直接 setOpen
-                            disabled={loading} // Disable close button during submission / CN: 提交期间禁用关闭按钮
+                            onClick={handleClose} // Use handleClose instead of setOpen directly
+                            disabled={loading} // Disable close button during submission
                             className="relative rounded-md text-gray-400 hover:text-gray-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:opacity-50"
                           >
                             <span className="absolute -inset-2.5" />
@@ -238,7 +212,7 @@ export default function EditApplicantDrawer({ applicant, onApplicantUpdated }) {
                       </div>
                     </div>
                     <DividerContainer>
-                      {/* Title input - required field / CN: 称谓输入 - 必填字段 */}
+                      {/* Title input - required field */}
                       <TextInput 
                         label="Title" 
                         placeholder="Mr, Ms, Dr" 
@@ -250,7 +224,7 @@ export default function EditApplicantDrawer({ applicant, onApplicantUpdated }) {
                         required
                       />
                       
-                      {/* First name input - required field / CN: 名字输入 - 必填字段 */}
+                      {/* First name input - required field */}
                       <TextInput 
                         label="First Name" 
                         placeholder="First Name" 
@@ -262,7 +236,7 @@ export default function EditApplicantDrawer({ applicant, onApplicantUpdated }) {
                         required
                       />
                       
-                      {/* Last name input - required field / CN: 姓氏输入 - 必填字段 */}
+                      {/* Last name input - required field */}
                       <TextInput 
                         label="Last Name" 
                         placeholder="Last Name" 
@@ -274,7 +248,7 @@ export default function EditApplicantDrawer({ applicant, onApplicantUpdated }) {
                         required
                       />
                       
-                      {/* Phone number input - required field / CN: 电话号码输入 - 必填字段 */}
+                      {/* Phone number input - required field */}
                       <TextInput 
                         label="Phone Number" 
                         placeholder="+61 xxx xxx xxx" 
@@ -285,7 +259,7 @@ export default function EditApplicantDrawer({ applicant, onApplicantUpdated }) {
                         onChange={(e) => handleInputChange('phone_number', e.target.value)}
                       />
                       
-                      {/* Email address input - required field / CN: 邮箱地址输入 - 必填字段 */}
+                      {/* Email address input - required field */}
                       <TextInput 
                         label="Email Address" 
                         placeholder="example@email.com" 
@@ -297,7 +271,7 @@ export default function EditApplicantDrawer({ applicant, onApplicantUpdated }) {
                         required
                       />
                       
-                      {/* Interview select - can be changed during editing / CN: 面试选择 - 编辑时可更改 */}
+                      {/* Interview select - can be changed during editing */}
                       <SelectInput 
                         label="Interview" 
                         placeholder={interviewsLoading ? "Loading interviews..." : "Select Interview"} 
@@ -309,7 +283,7 @@ export default function EditApplicantDrawer({ applicant, onApplicantUpdated }) {
                         disabled={interviewsLoading}
                       />
                       
-                      {/* Interview status select - can be changed during editing / CN: 面试状态选择 - 编辑时可更改 */}
+                      {/* Interview status select - can be changed during editing */}
                       <SelectInput 
                         label="Interview Status" 
                         placeholder="Select Interview Status" 
@@ -324,9 +298,9 @@ export default function EditApplicantDrawer({ applicant, onApplicantUpdated }) {
                   </div>
                   {/* Action buttons */}
                   <ActionButton 
-                    ActionContent={loading ? "Updating..." : "Update"} // Dynamic button text / CN: 动态按钮文本
-                    type="submit" // Make it a submit button / CN: 设为提交按钮
-                    disabled={loading || interviewsLoading} // Disable during submission or while loading interviews / CN: 提交期间或加载面试时禁用
+                    ActionContent={loading ? "Updating..." : "Update"} // Dynamic button text
+                    type="submit" // Make it a submit button
+                    disabled={loading || interviewsLoading} // Disable during submission or while loading interviews
                   />
                 </form>
               </DialogPanel>

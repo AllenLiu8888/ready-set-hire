@@ -1,45 +1,33 @@
 // =============================================================================
 // AI Question Generation Service
-// CN: AI问题生成服务
 // =============================================================================
 // This service provides AI-powered interview question generation capabilities
 // using various LLM providers like OpenAI, Azure OpenAI, or local models.
-// CN: 该服务使用各种LLM提供商（如OpenAI、Azure OpenAI或本地模型）提供AI驱动的面试问题生成功能。
 // =============================================================================
 
 import { createQuestion } from './questionService.js'
 
 /**
  * Generate interview questions using AI
- * CN: 使用AI生成面试问题
  * 
  * @param {Object} interviewData - Interview information
- * CN: @param {Object} interviewData - 面试信息
  * @param {string} interviewData.title - Interview title
- * CN: @param {string} interviewData.title - 面试标题
  * @param {string} interviewData.job_role - Job role
- * CN: @param {string} interviewData.job_role - 工作角色
  * @param {string} interviewData.description - Interview description
- * CN: @param {string} interviewData.description - 面试描述
  * @param {number} questionCount - Number of questions to generate (default: 8)
- * CN: @param {number} questionCount - 要生成的问题数量（默认：8）
  * @returns {Promise<Array>} Generated questions
- * CN: @returns {Promise<Array>} 生成的问题
  */
 export async function generateInterviewQuestions(interviewData, questionCount = 8) {
   try {
     console.log('Generating interview questions for:', interviewData)
     
     // Create prompt for AI
-    // CN: 为AI创建提示词
     const prompt = createPrompt(interviewData, questionCount)
     
     // Call AI API (using OpenAI-compatible endpoint)
-    // CN: 调用AI API（使用OpenAI兼容端点）
     const aiResponse = await callAIAPI(prompt)
     
     // Parse and validate questions
-    // CN: 解析和验证问题
     const questions = parseAIResponse(aiResponse)
     
     console.log('Generated', questions.length, 'questions successfully')
@@ -53,30 +41,23 @@ export async function generateInterviewQuestions(interviewData, questionCount = 
 
 // =============================================================================
 // Main Question Generation Functions
-// CN: 主要问题生成函数
 // =============================================================================
 
 /**
  * Generate questions and automatically add them to the interview
- * CN: 生成问题并自动添加到面试中
  * 
  * @param {Object} interview - Interview object
- * CN: @param {Object} interview - 面试对象
  * @param {number} questionCount - Number of questions to generate
- * CN: @param {number} questionCount - 要生成的问题数量
  * @returns {Promise<Array>} Created question objects
- * CN: @returns {Promise<Array>} 创建的问题对象
  */
 export async function generateAndCreateQuestions(interview, questionCount = 8) {
   try {
     console.log('Starting AI question generation and creation process...')
     
     // Generate questions using AI
-    // CN: 使用AI生成问题
     const generatedQuestions = await generateInterviewQuestions(interview, questionCount)
     
     // Create questions in database
-    // CN: 在数据库中创建问题
     const createdQuestions = []
     
     for (const questionData of generatedQuestions) {
@@ -94,7 +75,6 @@ export async function generateAndCreateQuestions(interview, questionCount = 8) {
       } catch (createError) {
         console.error('Failed to create question:', questionData.question, createError)
         // Continue with other questions even if one fails
-        // CN: 即使一个问题失败也继续处理其他问题
       }
     }
     
@@ -109,12 +89,10 @@ export async function generateAndCreateQuestions(interview, questionCount = 8) {
 
 // =============================================================================
 // AI Integration Helper Functions
-// CN: AI集成辅助函数
 // =============================================================================
 
 /**
  * Create prompt for AI question generation
- * CN: 为AI问题生成创建提示词
  */
 function createPrompt(interviewData, questionCount) {
   const { title, job_role, description } = interviewData
@@ -149,11 +127,9 @@ Only return the JSON array, no additional text or explanation.`
 
 /**
  * Call AI API for question generation
- * CN: 调用AI API生成问题
  */
 async function callAIAPI(prompt) {
   // Get API configuration
-  // CN: 获取API配置
   const apiConfig = getAIAPIConfig()
   
   if (!apiConfig.isConfigured) {
@@ -202,39 +178,32 @@ async function callAIAPI(prompt) {
 
 /**
  * Parse AI response and validate questions
- * CN: 解析AI响应并验证问题
  */
 function parseAIResponse(response) {
   try {
     // Clean up response (remove code blocks, extra whitespace)
-    // CN: 清理响应（移除代码块、多余空格）
     let cleanResponse = response.trim()
     
     // Remove markdown code blocks if present
-    // CN: 如果存在则移除markdown代码块
     if (cleanResponse.startsWith('```')) {
       cleanResponse = cleanResponse.replace(/```json\n?/g, '').replace(/```\n?/g, '')
     }
     
     // Parse JSON
-    // CN: 解析JSON
     const questions = JSON.parse(cleanResponse)
     
     // Validate structure
-    // CN: 验证结构
     if (!Array.isArray(questions)) {
       throw new Error('Response is not an array')
     }
     
     // Validate each question
-    // CN: 验证每个问题
     const validQuestions = questions.filter(q => {
       if (!q || typeof q !== 'object') return false
       if (!q.question || typeof q.question !== 'string') return false
       if (q.question.trim().length < 10) return false
       
       // Normalize difficulty
-      // CN: 规范化难度
       if (!q.difficulty || !['Easy', 'Intermediate', 'Advanced'].includes(q.difficulty)) {
         q.difficulty = 'Intermediate'
       }
@@ -254,29 +223,24 @@ function parseAIResponse(response) {
     console.error('Raw response:', response)
     
     // Fallback: return some default questions
-    // CN: 回退：返回一些默认问题
     return getFallbackQuestions()
   }
 }
 
 // =============================================================================
 // Configuration and Utility Functions
-// CN: 配置和工具函数
 // =============================================================================
 
 /**
  * Get AI API configuration
- * CN: 获取AI API配置
  */
 function getAIAPIConfig() {
   // Check for environment variables
-  // CN: 检查环境变量
   const apiKey = import.meta.env.VITE_AI_API_KEY
   const apiEndpoint = import.meta.env.VITE_AI_API_ENDPOINT
   const apiModel = import.meta.env.VITE_AI_API_MODEL
   
   // Default to OpenAI if no custom endpoint provided
-  // CN: 如果未提供自定义端点则默认使用OpenAI
   const defaultEndpoint = 'https://api.openai.com/v1/chat/completions'
   const defaultModel = 'gpt-3.5-turbo'
   
@@ -291,7 +255,6 @@ function getAIAPIConfig() {
 
 /**
  * Fallback questions when AI generation fails
- * CN: AI生成失败时的回退问题
  */
 function getFallbackQuestions() {
   return [
@@ -332,7 +295,6 @@ function getFallbackQuestions() {
 
 /**
  * Check if AI question generation is available
- * CN: 检查AI问题生成是否可用
  */
 export function isAIQuestionGenerationAvailable() {
   const config = getAIAPIConfig()
@@ -341,7 +303,6 @@ export function isAIQuestionGenerationAvailable() {
 
 /**
  * Get AI configuration status for debugging
- * CN: 获取AI配置状态用于调试
  */
 export function getAIConfigStatus() {
   const config = getAIAPIConfig()

@@ -1,10 +1,8 @@
 // =============================================================================
 // Confirm Alert Component - Modal confirmation dialog for destructive actions
-// CN: 确认提醒组件 - 用于破坏性操作的模态确认对话框
 // =============================================================================
 // Provides a modal confirmation dialog for dangerous actions like deletion,
 // with clear warning styling and confirm/cancel options.
-// CN: 为删除等危险操作提供模态确认对话框，具有清晰的警告样式和确认/取消选项。
 // =============================================================================
 
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
@@ -13,7 +11,6 @@ import { TriangleAlert } from 'lucide-react';
 
 /**
  * Confirmation dialog component for destructive actions
- * CN: 用于破坏性操作的确认对话框组件
  */
 export default function ConfirmAlert({ open, onClose, onConfirm, title, message }) {
   return (
