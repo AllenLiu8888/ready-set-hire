@@ -204,9 +204,10 @@ The application uses React's built-in state management:
 
 This project incorporates AI technologies in the following ways:
 
-- **AI Question Generation**: The system can automatically generate interview questions based on job roles and requirements using AI services
-- **Speech-to-Text**: Utilizes browser-based speech recognition APIs to convert candidate voice responses into text
-- **Development Assistance**: AI tools were used to assist with code documentation, debugging, and optimization during development
+- **AI 问题生成**：该系统连接 OpenAI LLM 模型，可利用人工智能服务，根据职位角色和要求自动生成面试问题。
+- **开发协助**：在开发过程中，利用人工智能工具辅助代码文档编写、调试及优化工作，并且在各类库的挑选上提供了显著帮助。
+- **注释协助撰写**：使用 Codex 与 Claude 协助修改和补充代码注释，确保说明准确清晰。
+- **学习协助**：在遇到难以理解的知识点时，借助 AI 工具进行讲解和学习。
 
 All AI-generated content is reviewed and can be edited by administrators before use in actual interviews.
 

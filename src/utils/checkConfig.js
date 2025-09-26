@@ -1,9 +1,7 @@
 // Configuration checker utility
-// CN: 配置检查工具
 import { getConfigStatus } from '../services/config.js'
 
 // Check and display configuration status in development
-// CN: 在开发环境中检查并显示配置状态
 export function checkConfigInDev() {
   if (import.meta.env.DEV) {
     const status = getConfigStatus()

@@ -1,10 +1,8 @@
 // =============================================================================
 // Interview Complete Page - Success screen after interview submission
-// CN: 面试完成页面 - 面试提交后的成功界面
 // =============================================================================
 // This page displays completion confirmation after an applicant successfully
 // submits their interview, showing summary information and next steps.
-// CN: 该页面在候选人成功提交面试后显示完成确认，展示摘要信息和下一步骤。
 // =============================================================================
 
 import { useState, useEffect, useCallback } from 'react'
@@ -17,21 +15,18 @@ export default function InterviewCompletePage() {
   const { applicantId } = useParams()
   
   // State for applicant and interview data
-  // CN: 候选人和面试数据状态
   const [applicant, setApplicant] = useState(null)
   const [interviewTitle, setInterviewTitle] = useState('')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
   // Fetch applicant and interview data
-  // CN: 获取候选人和面试数据
   const fetchCompletionData = useCallback(async () => {
     try {
       setLoading(true)
       setError(null)
 
       // Get applicant information
-      // CN: 获取候选人信息
       const applicantArray = await getApplicant(applicantId)
       console.log('Applicant array:', applicantArray)
       
@@ -44,7 +39,6 @@ export default function InterviewCompletePage() {
       setApplicant(applicantData)
 
       // Get interview title from localStorage cache
-      // CN: 从localStorage缓存获取面试标题
       if (applicantData.interview_id) {
         const title = getInterviewTitleById(applicantData.interview_id)
         console.log('Interview title:', title)
@@ -64,7 +58,6 @@ export default function InterviewCompletePage() {
   }, [fetchCompletionData])
 
   // Loading state
-  // CN: 加载状态
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -77,7 +70,6 @@ export default function InterviewCompletePage() {
   }
 
   // Error state
-  // CN: 错误状态
   if (error) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">

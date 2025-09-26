@@ -1,10 +1,8 @@
 // =============================================================================
 // Interviews Management Page - CRUD operations for interview templates
-// CN: 面试管理页面 - 面试模板的增删改查操作
 // =============================================================================
 // This page provides comprehensive interview management functionality including
 // creation, editing, deletion, AI question generation, and statistics display.
-// CN: 该页面提供全面的面试管理功能，包括创建、编辑、删除、AI问题生成和统计显示。
 // =============================================================================
 
 import { CircleQuestionMark, Users, Trash2, RefreshCcw } from 'lucide-react';
@@ -17,13 +15,11 @@ import SuccessAlert from '../../components/shared/alerts/SuccessAlert.jsx';
 import { AIQuestionGeneratorCompact } from '../../components/ai/AIQuestionGenerator.jsx';
 
 // Import API services
-// CN: 导入 API 服务
 import { getInterviews, deleteInterview, getQuestions, getApplicants } from '../../services';
 import { storeInterviews } from '../../utils/interviewUtils';
 
 // =============================================================================
 // Tailwind Variants for Dynamic Styling
-// CN: 动态样式的Tailwind变体
 // =============================================================================
 
 const InterviewStatus = tv({
@@ -50,38 +46,32 @@ const ApplicantsStatus = tv({
 export default function InterviewsPage() {
   // =============================================================================
   // Component State Management
-  // CN: 组件状态管理
   // =============================================================================
   
   // State management for interviews data and UI states
-  // CN: 面试数据和 UI 状态的状态管理
-  const [interviews, setInterviews] = useState([]) // Store interviews list / CN: 存储面试列表
-  const [questions, setQuestions] = useState([]) // Store questions list / CN: 存储题目列表
-  const [applicants, setApplicants] = useState([]) // Store applicants list / CN: 存储候选人列表
-  const [loading, setLoading] = useState(true) // Loading state / CN: 加载状态
-  const [error, setError] = useState(null) // Error state / CN: 错误状态
+  const [interviews, setInterviews] = useState([]) // Store interviews list
+  const [questions, setQuestions] = useState([]) // Store questions list
+  const [applicants, setApplicants] = useState([]) // Store applicants list
+  const [loading, setLoading] = useState(true) // Loading state
+  const [error, setError] = useState(null) // Error state
   
   // State for delete confirmation dialog
-  // CN: 删除确认对话框的状态
-  const [showConfirm, setShowConfirm] = useState(false) // Control confirm dialog / CN: 控制确认对话框
-  const [interviewToDelete, setInterviewToDelete] = useState(null) // Interview to be deleted / CN: 要删除的面试
+  const [showConfirm, setShowConfirm] = useState(false) // Control confirm dialog
+  const [interviewToDelete, setInterviewToDelete] = useState(null) // Interview to be deleted
   
   // State for success notification
-  // CN: 成功通知的状态
-  const [successMessage, setSuccessMessage] = useState('') // Success message content / CN: 成功消息内容
-  const [showSuccess, setShowSuccess] = useState(false) // Control success alert visibility / CN: 控制成功提醒的可见性
+  const [successMessage, setSuccessMessage] = useState('') // Success message content
+  const [showSuccess, setShowSuccess] = useState(false) // Control success alert visibility
 
   // Function to fetch all data from API
-  // CN: 从 API 获取所有数据的函数
   const fetchInterviews = async () => {
     try {
-      setLoading(true) // Start loading / CN: 开始加载
-      setError(null) // Clear previous errors / CN: 清除之前的错误
+      setLoading(true) // Start loading
+      setError(null) // Clear previous errors
       
       console.log('Fetching interviews, questions, and applicants data...')
       
       // Fetch all data in parallel for better performance
-      // CN: 并行获取所有数据以提高性能
       const [interviewsData, questionsData, applicantsData] = await Promise.all([
         getInterviews(),
         getQuestions(),
@@ -89,52 +79,44 @@ export default function InterviewsPage() {
       ])
       
       // Update state with fetched data
-      // CN: 用获取的数据更新状态
       setInterviews(interviewsData)
       setQuestions(questionsData)
       setApplicants(applicantsData)
       
       // Store interviews in localStorage for other components to use
-      // CN: 将面试数据存储到localStorage供其他组件使用
       storeInterviews(interviewsData)
       
       console.log('All data loaded successfully')
       
     } catch (err) {
       // Handle errors
-      // CN: 处理错误
       console.error('Failed to fetch data:', err)
       setError('Failed to load data. Please try again.')
     } finally {
       // Always stop loading regardless of success/failure
-      // CN: 无论成功或失败都停止加载
       setLoading(false)
     }
   }
 
   // Function to handle interview creation success
-  // CN: 处理面试创建成功的函数
   const handleInterviewCreated = () => {
-    fetchInterviews() // Refresh the list / CN: 刷新列表
-    showSuccessNotification('Interview created successfully!') // Show success message / CN: 显示成功消息
+    fetchInterviews() // Refresh the list
+    showSuccessNotification('Interview created successfully!') // Show success message
   }
 
   // Function to handle interview update success
-  // CN: 处理面试更新成功的函数
   const handleInterviewUpdated = () => {
-    fetchInterviews() // Refresh the list / CN: 刷新列表
-    showSuccessNotification('Interview updated successfully!') // Show success message / CN: 显示成功消息
+    fetchInterviews() // Refresh the list
+    showSuccessNotification('Interview updated successfully!') // Show success message
   }
 
   // Function to handle delete button click - shows confirmation dialog
-  // CN: 处理删除按钮点击 - 显示确认对话框
   const handleDeleteClick = (interview) => {
-    setInterviewToDelete(interview) // Store interview to delete / CN: 存储要删除的面试
-    setShowConfirm(true) // Show confirmation dialog / CN: 显示确认对话框
+    setInterviewToDelete(interview) // Store interview to delete
+    setShowConfirm(true) // Show confirmation dialog
   }
 
   // Function to handle confirmed deletion
-  // CN: 处理确认删除的函数
   const handleConfirmDelete = async () => {
     if (!interviewToDelete) return
 
@@ -142,28 +124,23 @@ export default function InterviewsPage() {
       console.log('Deleting interview:', interviewToDelete.id, interviewToDelete.title)
       
       // Call API service to delete interview
-      // CN: 调用 API 服务删除面试
       await deleteInterview(interviewToDelete.id)
       
       console.log('Delete API call successful')
       
       // Remove from local state (optimistic update)
-      // CN: 从本地状态中移除（乐观更新）
       setInterviews(prev => prev.filter(interview => interview.id !== interviewToDelete.id))
       
       // Clean up state
-      // CN: 清理状态
       setInterviewToDelete(null)
       setShowConfirm(false)
       
       // Show success message
-      // CN: 显示成功消息
       console.log('Interview deleted successfully:', interviewToDelete.title)
       showSuccessNotification(`Interview "${interviewToDelete.title}" deleted successfully!`)
       
     } catch (err) {
       // Handle deletion errors with detailed logging
-      // CN: 处理删除错误并详细记录
       console.error('Failed to delete interview:', err)
       console.error('Interview details:', {
         id: interviewToDelete.id,
@@ -172,30 +149,25 @@ export default function InterviewsPage() {
       })
       
       // Show detailed error message
-      // CN: 显示详细错误消息
       alert(`Failed to delete interview "${interviewToDelete.title}": ${err.message}`)
       
       // Keep dialog open so user can try again
-      // CN: 保持对话框打开，用户可以重试
       // setShowConfirm(false) // Don't close on error
     }
   }
 
   // Function to handle dialog close
-  // CN: 处理对话框关闭的函数
   const handleCloseConfirm = () => {
     setShowConfirm(false)
     setInterviewToDelete(null)
   }
 
   // Function to calculate questions count for an interview
-  // CN: 计算面试题目数量的函数
   const getQuestionsCount = (interviewId) => {
     return questions.filter(q => q.interview_id === interviewId).length
   }
 
   // Function to calculate applicants count and status for an interview
-  // CN: 计算面试候选人数量和状态的函数
   const getApplicantsStats = (interviewId) => {
     const interviewApplicants = applicants.filter(a => a.interview_id === interviewId)
     const total = interviewApplicants.length
@@ -206,12 +178,11 @@ export default function InterviewsPage() {
   }
 
   // Function to show success notification
-  // CN: 显示成功通知的函数
   const showSuccessNotification = (message) => {
     setSuccessMessage(message)
     setShowSuccess(true)
     
-    // Auto-hide after 3 seconds / CN: 3秒后自动隐藏
+    // Auto-hide after 3 seconds
     setTimeout(() => {
       setShowSuccess(false)
       setSuccessMessage('')
@@ -219,20 +190,17 @@ export default function InterviewsPage() {
   }
 
   // Function to handle success alert close
-  // CN: 处理成功提醒关闭的函数
   const handleCloseSuccess = () => {
     setShowSuccess(false)
     setSuccessMessage('')
   }
 
   // Effect hook to fetch data when component mounts
-  // CN: 当组件挂载时获取数据的副作用钩子
   useEffect(() => {
     fetchInterviews()
-  }, []) // Empty dependency array means this runs once on mount / CN: 空依赖数组意味着只在挂载时运行一次
+  }, []) // Empty dependency array means this runs once on mount
 
   // Early return for loading state
-  // CN: 加载状态的早期返回
   if (loading) {
     return (
       <div className="px-4 sm:px-6 lg:px-8">
@@ -247,7 +215,6 @@ export default function InterviewsPage() {
   }
 
   // Early return for error state
-  // CN: 错误状态的早期返回
   if (error) {
     return (
       <div className="px-4 sm:px-6 lg:px-8">
@@ -268,7 +235,7 @@ export default function InterviewsPage() {
 
   return (
     <div className="px-4 sm:px-6 lg:px-8">
-      {/* Success notification - floating at top / CN: 成功通知 - 浮动在顶部 */}
+      {/* Success notification - floating at top */}
       {showSuccess && (
         <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-md">
           <SuccessAlert message={successMessage} onClose={handleCloseSuccess} />
@@ -285,15 +252,15 @@ export default function InterviewsPage() {
         <div className="flex gap-4 mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
           <button
             type="button"
-            onClick={fetchInterviews} // Add click handler to refresh data / CN: 添加点击处理器来刷新数据
-            disabled={loading} // Disable while loading / CN: 加载时禁用
+            onClick={fetchInterviews} // Add click handler to refresh data
+            disabled={loading} // Disable while loading
             className="rounded-md bg-white px-3 py-2 text-center font-semibold text-gray-900 shadow-xs inset-ring inset-ring-gray-300 hover:bg-gray-200 hover:text-gray-500 disabled:opacity-50"
           >
             <div className="flex items-center gap-2">
               <RefreshCcw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`}/> Refresh
             </div>
           </button>
-          <CreateInterviewDrawer onInterviewCreated={handleInterviewCreated} /> {/* Pass callback to refresh and show success / CN: 传递回调以刷新并显示成功消息 */}
+          <CreateInterviewDrawer onInterviewCreated={handleInterviewCreated} /> {/* Pass callback to refresh and show success */}
         </div>  
       </div>
       <div className="mt-8 flow-root">
@@ -324,7 +291,7 @@ export default function InterviewsPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
-                  {/* Show empty state if no interviews / CN: 如果没有面试则显示空状态 */}
+                  {/* Show empty state if no interviews */}
                   {interviews.length === 0 ? (
                     <tr>
                       <td colSpan="6" className="py-8 text-center text-gray-500">
@@ -336,7 +303,7 @@ export default function InterviewsPage() {
                       </td>
                     </tr>
                   ) : (
-                    // Map through real interviews data from API / CN: 遍历来自 API 的真实面试数据
+                    // Map through real interviews data from API
                     interviews.map((interview) => (
                       <tr key={interview.id}>    
                         <td className="py-4 px-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-6">
@@ -373,24 +340,23 @@ export default function InterviewsPage() {
                         </td>
                         <td className="py-4 px-3 text-center text-sm font-medium whitespace-nowrap">
                           <div className="flex items-center justify-center space-x-2">
-                            {/* AI Question Generator / CN: AI问题生成器 */}
+                            {/* AI Question Generator */}
                             <AIQuestionGeneratorCompact
                               interview={interview}
                               onQuestionsGenerated={() => {
                                 // Refresh data to show new questions count
-                                // CN: 刷新数据以显示新的问题数量
                                 fetchInterviews()
                                 showSuccessNotification(`AI questions generated for "${interview.title}"!`)
                               }}
                             />
                             
-                            {/* Edit button / CN: 编辑按钮 */}
+                            {/* Edit button */}
                             <EditInterviewDrawer 
                               interview={interview} 
                               onInterviewUpdated={handleInterviewUpdated}
                             />
                             
-                            {/* Delete button / CN: 删除按钮 */}
+                            {/* Delete button */}
                             <button
                               type="button"
                               onClick={() => handleDeleteClick(interview)}
@@ -412,7 +378,7 @@ export default function InterviewsPage() {
         </div>
       </div>
       
-      {/* Confirmation dialog for delete action / CN: 删除操作的确认对话框 */}
+      {/* Confirmation dialog for delete action */}
       {showConfirm && (
         <ConfirmAlert
           open={showConfirm}
