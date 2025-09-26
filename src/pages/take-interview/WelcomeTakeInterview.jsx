@@ -1,10 +1,8 @@
 // =============================================================================
 // Welcome Take Interview Page - Applicant pre-interview information display
-// CN: 欢迎参加面试页面 - 候选人面试前信息展示
 // =============================================================================
 // This page displays applicant information and interview details before starting
 // the actual interview process, providing context and instructions to candidates.
-// CN: 该页面在开始实际面试流程前显示候选人信息和面试详情，为候选人提供背景和说明。
 // =============================================================================
 
 import { useState, useEffect, useCallback } from 'react'
@@ -12,31 +10,27 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { User, Mail, Phone, Building, Clock, FileText, ChevronRight } from 'lucide-react'
 
 // Import API services for getting applicant and interview data
-// CN: 导入获取候选人和面试数据的 API 服务
 import { getApplicant, getQuestions } from '../../services'
 import { getInterviewTitleById } from '../../utils/interviewUtils'
 
 export default function WelcomeTakeInterview() {
-  const { applicantId } = useParams() // Get applicant ID from URL / CN: 从URL获取候选人ID
+  const { applicantId } = useParams() // Get applicant ID from URL
   const navigate = useNavigate()
 
   // State management
-  // CN: 状态管理
-  const [applicant, setApplicant] = useState(null) // Applicant data / CN: 候选人数据
-  const [interview, setInterview] = useState(null) // Interview data / CN: 面试数据
-  const [questionsCount, setQuestionsCount] = useState(0) // Number of questions / CN: 题目数量
-  const [loading, setLoading] = useState(true) // Loading state / CN: 加载状态
-  const [error, setError] = useState(null) // Error state / CN: 错误状态
+  const [applicant, setApplicant] = useState(null) // Applicant data
+  const [interview, setInterview] = useState(null) // Interview data
+  const [questionsCount, setQuestionsCount] = useState(0) // Number of questions
+  const [loading, setLoading] = useState(true) // Loading state
+  const [error, setError] = useState(null) // Error state
 
   // Function to fetch applicant and interview data
-  // CN: 获取候选人和面试数据的函数
   const fetchWelcomeData = useCallback(async () => {
     try {
       setLoading(true)
       setError(null)
 
       // Get applicant data
-      // CN: 获取候选人数据
       const applicantData = await getApplicant(applicantId)
       if (!applicantData || applicantData.length === 0) {
         throw new Error('Applicant not found')
@@ -46,21 +40,17 @@ export default function WelcomeTakeInterview() {
       setApplicant(currentApplicant)
 
       // Get interview title from localStorage (stored by admin pages)
-      // CN: 从localStorage获取面试标题（由管理页面存储）
       const interviewTitle = getInterviewTitleById(currentApplicant.interview_id)
       
       // Create interview object with basic info
-      // CN: 创建包含基本信息的面试对象
       setInterview({
         id: currentApplicant.interview_id,
         title: interviewTitle,
         // TODO: Get full interview details if needed
-        // CN: TODO: 如需要可获取完整面试详情
         description: 'Complete this interview by answering all questions. You can record audio responses and provide written notes.'
       })
 
       // Get questions count for this interview
-      // CN: 获取该面试的题目数量
       const questionsData = await getQuestions()
       const filteredQuestions = questionsData.filter(q => q.interview_id === currentApplicant.interview_id)
       setQuestionsCount(filteredQuestions.length)
@@ -78,7 +68,6 @@ export default function WelcomeTakeInterview() {
   }, [applicantId])
 
   // Effect to fetch data when component mounts
-  // CN: 组件挂载时获取数据的副作用
   useEffect(() => {
     if (applicantId) {
       fetchWelcomeData()
@@ -89,15 +78,12 @@ export default function WelcomeTakeInterview() {
   }, [applicantId, fetchWelcomeData])
 
   // Handle start interview
-  // CN: 处理开始面试
   const handleStartInterview = () => {
     // Navigate to the actual interview page
-    // CN: 导航到实际的面试页面
     navigate(`/take/${applicantId}/interview`)
   }
 
   // Early return for loading state
-  // CN: 加载状态的早期返回
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -110,7 +96,6 @@ export default function WelcomeTakeInterview() {
   }
 
   // Early return for error state
-  // CN: 错误状态的早期返回
   if (error) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">

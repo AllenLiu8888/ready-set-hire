@@ -1,10 +1,8 @@
 // =============================================================================
 // Desktop Sidebar Component - Fixed navigation sidebar for desktop layout
-// CN: 桌面侧边栏组件 - 桌面布局的固定导航侧边栏
 // =============================================================================
 // Provides the main navigation sidebar for desktop screens, including brand logo,
 // navigation items, and profile section with responsive styling.
-// CN: 为桌面屏幕提供主导航侧边栏，包括品牌标志、导航项目和个人资料部分，具有响应式样式。
 // =============================================================================
 
 import { NavLink } from 'react-router-dom'
@@ -12,8 +10,6 @@ import { NavLink } from 'react-router-dom'
 /**
  * Desktop-only sidebar component for main navigation
  * Shows brand, primary navigation, and a fixed profile link.
- * CN: 仅桌面端的侧边栏组件，用于主导航
- * 展示品牌、主导航与固定的个人入口。
  */
 function DesktopSidebar({ navigation, logoSrc, profile }) {
   return (
@@ -56,7 +52,6 @@ function DesktopSidebar({ navigation, logoSrc, profile }) {
               </ul>
             </li>
             {/* Removed teams section for desktop-only simplified layout */}
-            {/* 已移除 teams 区域，聚焦主导航 */}
             <li className="-mx-6 mt-auto">
               <a
                 href={profile?.href ?? '#'}

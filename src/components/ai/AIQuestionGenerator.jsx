@@ -1,10 +1,8 @@
 // =============================================================================
 // AI Question Generator Component
-// CN: AI问题生成器组件
 // =============================================================================
 // This component provides a user interface for AI-powered interview question
 // generation. It handles configuration validation, API calls, and user feedback.
-// CN: 该组件为AI驱动的面试问题生成提供用户界面。它处理配置验证、API调用和用户反馈。
 // =============================================================================
 
 import { useState } from 'react'
@@ -13,16 +11,11 @@ import { generateAndCreateQuestions, isAIQuestionGenerationAvailable, getAIConfi
 
 /**
  * AI Question Generator Component
- * CN: AI问题生成器组件
- * 
+ *
  * @param {Object} props - Component props
- * CN: @param {Object} props - 组件属性
  * @param {Object} props.interview - Interview object
- * CN: @param {Object} props.interview - 面试对象
  * @param {Function} props.onQuestionsGenerated - Callback when questions are generated
- * CN: @param {Function} props.onQuestionsGenerated - 问题生成时的回调
  * @param {string} props.size - Button size ('sm', 'md', 'lg')
- * CN: @param {string} props.size - 按钮大小
  */
 export default function AIQuestionGenerator({ 
   interview, 
@@ -32,30 +25,22 @@ export default function AIQuestionGenerator({
 }) {
   // =============================================================================
   // Component State Management
-  // CN: 组件状态管理
   // =============================================================================
   
   const [isGenerating, setIsGenerating] = useState(false) // AI generation in progress
-  // CN: AI生成进行中
   const [showConfig, setShowConfig] = useState(false) // Show configuration panel
-  // CN: 显示配置面板
   const [lastError, setLastError] = useState(null) // Last error message
-  // CN: 最后的错误消息
   const [lastSuccess, setLastSuccess] = useState(null) // Last success message
-  // CN: 最后的成功消息
 
   // Check if AI is available
-  // CN: 检查AI是否可用
   const isAIAvailable = isAIQuestionGenerationAvailable()
   const configStatus = getAIConfigStatus()
 
   // =============================================================================
   // Event Handlers
-  // CN: 事件处理器
   // =============================================================================
 
   // Handle question generation
-  // CN: 处理问题生成
   const handleGenerateQuestions = async () => {
     if (!interview || isGenerating || disabled) return
 
@@ -67,20 +52,17 @@ export default function AIQuestionGenerator({
       console.log('Starting AI question generation for interview:', interview.title)
 
       // Generate and create questions
-      // CN: 生成并创建问题
       const createdQuestions = await generateAndCreateQuestions(interview, 8)
 
       console.log('AI question generation completed successfully')
       setLastSuccess(`Successfully generated ${createdQuestions.length} questions!`)
 
       // Notify parent component
-      // CN: 通知父组件
       if (onQuestionsGenerated) {
         onQuestionsGenerated(createdQuestions)
       }
 
       // Auto-hide success message after 3 seconds
-      // CN: 3秒后自动隐藏成功消息
       setTimeout(() => setLastSuccess(null), 3000)
 
     } catch (error) {
@@ -88,7 +70,6 @@ export default function AIQuestionGenerator({
       setLastError(error.message)
       
       // Auto-hide error message after 5 seconds
-      // CN: 5秒后自动隐藏错误消息
       setTimeout(() => setLastError(null), 5000)
     } finally {
       setIsGenerating(false)
@@ -97,11 +78,9 @@ export default function AIQuestionGenerator({
 
   // =============================================================================
   // UI Configuration and Styling
-  // CN: UI配置和样式
   // =============================================================================
   
   // Button size classes
-  // CN: 按钮大小类
   const sizeClasses = {
     sm: 'px-2 py-1 text-xs',
     md: 'px-3 py-2 text-sm',
@@ -110,11 +89,9 @@ export default function AIQuestionGenerator({
 
   // =============================================================================
   // Conditional Rendering Logic
-  // CN: 条件渲染逻辑
   // =============================================================================
 
   // If AI is not configured, show config button
-  // CN: 如果AI未配置，显示配置按钮
   if (!isAIAvailable) {
     return (
       <div className="relative">
@@ -231,7 +208,6 @@ export default function AIQuestionGenerator({
 
 /**
  * Compact version for table actions
- * CN: 表格操作的紧凑版本
  */
 export function AIQuestionGeneratorCompact({ interview, onQuestionsGenerated }) {
   return (
@@ -245,7 +221,6 @@ export function AIQuestionGeneratorCompact({ interview, onQuestionsGenerated }) 
 
 /**
  * Full-width version for dedicated sections
- * CN: 专用部分的全宽版本
  */
 export function AIQuestionGeneratorFull({ interview, onQuestionsGenerated }) {
   return (

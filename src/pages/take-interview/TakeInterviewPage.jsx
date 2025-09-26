@@ -1,10 +1,8 @@
 // =============================================================================
 // Take Interview Page - Main interview taking interface with speech recognition
-// CN: 参加面试页面 - 带语音识别的主要面试界面
 // =============================================================================
 // This page handles the complete interview-taking experience for applicants,
 // including question navigation, voice recording, text input, and submission.
-// CN: 该页面处理候选人的完整面试体验，包括问题导航、语音录制、文本输入和提交。
 // =============================================================================
 
 import { useState, useEffect, useCallback } from 'react'
@@ -13,11 +11,9 @@ import { Check, Mic, Square, Play, Pause } from 'lucide-react'
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
 
 // Import API services for getting applicant and questions
-// CN: 导入获取候选人和题目的 API 服务
 import { getApplicant, getQuestions, createApplicantAnswer, updateApplicant } from '../../services'
 
 // Utility function for class names
-// CN: 类名工具函数
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
@@ -25,62 +21,46 @@ function classNames(...classes) {
 export default function TakeInterviewPage() {
   // =============================================================================
   // URL Parameters and Navigation
-  // CN: URL参数和导航
   // =============================================================================
   
   const { applicantId } = useParams() // Get applicant ID from URL
-  // CN: 从URL获取候选人ID
   const navigate = useNavigate() // React Router navigation function
-  // CN: React Router导航函数
 
   // =============================================================================
   // Speech Recognition Integration
-  // CN: 语音识别集成
   // =============================================================================
   
   // Speech Recognition hook
-  // CN: 语音识别钩子
   const {
     transcript, // Real-time transcript of spoken words
-    // CN: 语音单词的实时转录
     listening, // Whether microphone is currently active
-    // CN: 麦克风是否当前活跃
     resetTranscript, // Function to clear current transcript
-    // CN: 清除当前转录的函数
     browserSupportsSpeechRecognition, // Browser compatibility check
-    // CN: 浏览器兼容性检查
     isMicrophoneAvailable // Microphone permission status
-    // CN: 麦克风权限状态
   } = useSpeechRecognition()
 
   // =============================================================================
   // Component State Management
-  // CN: 组件状态管理
   // =============================================================================
 
   // State management for the interview process
-  // CN: 面试流程的状态管理
-  const [applicant, setApplicant] = useState(null) // Applicant data / CN: 候选人数据
-  const [questions, setQuestions] = useState([]) // Interview questions / CN: 面试题目
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0) // Current question index / CN: 当前题目索引
-  const [answers, setAnswers] = useState({}) // Store answers for each question / CN: 存储每个题目的答案
-  const [loading, setLoading] = useState(true) // Loading state / CN: 加载状态
-  const [error, setError] = useState(null) // Error state / CN: 错误状态
- // Interview completion state / CN: 面试完成状态
+  const [applicant, setApplicant] = useState(null) // Applicant data
+  const [questions, setQuestions] = useState([]) // Interview questions
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0) // Current question index
+  const [answers, setAnswers] = useState({}) // Store answers for each question
+  const [loading, setLoading] = useState(true) // Loading state
+  const [error, setError] = useState(null) // Error state
 
   // Recording states for each question
-  // CN: 每个题目的录音状态
-  const [recordingStates, setRecordingStates] = useState({}) // Track recording state per question / CN: 跟踪每个题目的录音状态
-  const [submitting, setSubmitting] = useState(false) // Submission state / CN: 提交状态
-  const [currentRecordingQuestion, setCurrentRecordingQuestion] = useState(null) // Currently recording question / CN: 当前录音的题目
+  const [recordingStates, setRecordingStates] = useState({}) // Track recording state per question
+  const [submitting, setSubmitting] = useState(false) // Submission state
+  const [currentRecordingQuestion, setCurrentRecordingQuestion] = useState(null) // Currently recording question
 
   // =============================================================================
   // Data Processing and UI Helper Functions
-  // CN: 数据处理和UI辅助函数
   // =============================================================================
 
   // Interview steps for progress indicator
-  // CN: 面试进度指示器的步骤
   const getSteps = () => {
     if (!questions.length) return []
     
@@ -92,14 +72,12 @@ export default function TakeInterviewPage() {
   }
 
   // Function to fetch applicant and interview data
-  // CN: 获取候选人和面试数据的函数
   const fetchInterviewData = useCallback(async () => {
     try {
       setLoading(true)
       setError(null)
 
       // Get applicant data
-      // CN: 获取候选人数据
       const applicantData = await getApplicant(applicantId)
       if (!applicantData || applicantData.length === 0) {
         throw new Error('Applicant not found')
@@ -109,10 +87,8 @@ export default function TakeInterviewPage() {
       setApplicant(currentApplicant)
 
       // Get questions for this applicant's interview
-      // CN: 获取该候选人面试的题目
       const questionsData = await getQuestions()
       // Filter questions by interview_id
-      // CN: 按interview_id过滤题目
       const filteredQuestions = questionsData.filter(q => q.interview_id === currentApplicant.interview_id)
       if (!filteredQuestions || filteredQuestions.length === 0) {
         throw new Error('No questions found for this interview')
@@ -121,7 +97,6 @@ export default function TakeInterviewPage() {
       setQuestions(filteredQuestions)
 
       // Initialize recording states and answers
-      // CN: 初始化录音状态和答案
       const initialRecordingStates = {}
       const initialAnswers = {}
       filteredQuestions.forEach(question => {
@@ -145,7 +120,6 @@ export default function TakeInterviewPage() {
   }, [applicantId])
 
   // Effect to fetch data when component mounts
-  // CN: 组件挂载时获取数据的副作用
   useEffect(() => {
     if (applicantId) {
       fetchInterviewData()
@@ -156,11 +130,9 @@ export default function TakeInterviewPage() {
   }, [applicantId, fetchInterviewData])
 
   // Effect to handle speech recognition transcript
-  // CN: 处理语音识别转录文本的副作用
   useEffect(() => {
     if (currentRecordingQuestion && transcript) {
       // Update the answer with the transcript
-      // CN: 用转录文本更新答案
       setAnswers(prev => ({
         ...prev,
         [currentRecordingQuestion]: transcript
@@ -170,11 +142,9 @@ export default function TakeInterviewPage() {
 
   // =============================================================================
   // Event Handlers and User Interactions
-  // CN: 事件处理器和用户交互
   // =============================================================================
 
   // Handle answer text change
-  // CN: 处理答案文本变化
   const handleAnswerChange = (questionId, value) => {
     setAnswers(prev => ({
       ...prev,
@@ -183,10 +153,8 @@ export default function TakeInterviewPage() {
   }
 
   // Handle recording functions using Speech Recognition API
-  // CN: 使用语音识别 API 处理录音功能
   const handleStartRecording = async (questionId) => {
     // Check browser support and microphone availability
-    // CN: 检查浏览器支持和麦克风可用性
     if (!browserSupportsSpeechRecognition) {
       alert('Browser does not support speech recognition. Please use Chrome, Edge, or Safari.')
       return
@@ -199,15 +167,12 @@ export default function TakeInterviewPage() {
 
     try {
       // Reset transcript for new recording
-      // CN: 为新录音重置转录文本
       resetTranscript()
       
       // Set current recording question
-      // CN: 设置当前录音题目
       setCurrentRecordingQuestion(questionId)
       
       // Update recording state
-      // CN: 更新录音状态
       setRecordingStates(prev => ({
         ...prev,
         [questionId]: {
@@ -218,7 +183,6 @@ export default function TakeInterviewPage() {
       }))
 
       // Start listening with continuous mode and English language
-      // CN: 开启连续模式和英语语言的监听
       await SpeechRecognition.startListening({ 
         continuous: true,
         language: 'en-US'
@@ -234,23 +198,20 @@ export default function TakeInterviewPage() {
   const handleStopRecording = async (questionId) => {
     try {
       // Stop listening
-      // CN: 停止监听
       await SpeechRecognition.stopListening()
       
       // Update recording state
-      // CN: 更新录音状态
       setRecordingStates(prev => ({
         ...prev,
         [questionId]: {
           ...prev[questionId],
           isRecording: false,
           hasRecording: transcript.length > 0,
-          transcriptText: transcript // Store the transcript / CN: 存储转录文本
+          transcriptText: transcript // Store the transcript
         }
       }))
 
       // Clear current recording question
-      // CN: 清除当前录音题目
       setCurrentRecordingQuestion(null)
       
       console.log('Stopped voice recording for question:', questionId)
@@ -263,20 +224,16 @@ export default function TakeInterviewPage() {
   const handlePlayRecording = (questionId) => {
     // For speech recognition, we don't have actual audio playback
     // Instead, we can show the transcript or use speech synthesis to read it back
-    // CN: 对于语音识别，我们没有实际的音频播放
-    // 相反，我们可以显示转录文本或使用语音合成来读回
     const recordingState = recordingStates[questionId]
     
     if (recordingState?.transcriptText) {
       // Use Speech Synthesis API to read back the transcript
-      // CN: 使用语音合成 API 读回转录文本
       const utterance = new SpeechSynthesisUtterance(recordingState.transcriptText)
       utterance.rate = 0.8
       utterance.lang = 'en-US'
       
       if (recordingState.isPlaying) {
         // Stop speaking
-        // CN: 停止朗读
         window.speechSynthesis.cancel()
         setRecordingStates(prev => ({
           ...prev,
@@ -287,7 +244,6 @@ export default function TakeInterviewPage() {
         }))
       } else {
         // Start speaking
-        // CN: 开始朗读
         window.speechSynthesis.speak(utterance)
         setRecordingStates(prev => ({
           ...prev,
@@ -298,7 +254,6 @@ export default function TakeInterviewPage() {
         }))
         
         // Stop playing when speech ends
-        // CN: 语音结束时停止播放
         utterance.onend = () => {
           setRecordingStates(prev => ({
             ...prev,
@@ -315,7 +270,6 @@ export default function TakeInterviewPage() {
   }
 
   // Navigate to next question
-  // CN: 导航到下一个题目
   const handleNextQuestion = () => {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1)
@@ -323,7 +277,6 @@ export default function TakeInterviewPage() {
   }
 
   // Navigate to previous question
-  // CN: 导航到上一个题目
   const handlePreviousQuestion = () => {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex(prev => prev - 1)
@@ -331,14 +284,12 @@ export default function TakeInterviewPage() {
   }
 
   // Submit all answers
-  // CN: 提交所有答案
   const handleSubmitInterview = async () => {
     try {
       setSubmitting(true)
       console.log('Starting interview submission...')
 
       // Check if there's at least one answer or recording
-      // CN: 检查是否至少有一个答案或录音
       const hasAnyAnswer = questions.some(question => {
         const recordingState = recordingStates[question.id]
         const textAnswer = answers[question.id]
@@ -351,7 +302,6 @@ export default function TakeInterviewPage() {
       }
 
       // Submit answers for each question that has content
-      // CN: 为每个有内容的题目提交答案
       let submittedCount = 0
       for (const question of questions) {
         const recordingState = recordingStates[question.id]
@@ -359,14 +309,12 @@ export default function TakeInterviewPage() {
         const voiceAnswer = recordingState?.transcriptText?.trim()
         
         // Skip questions with no answers
-        // CN: 跳过没有答案的题目
         if (!textAnswer && !voiceAnswer) {
           console.log(`Skipping question ${question.id} - no answer provided`)
           continue
         }
 
         // Combine written answer with speech transcript
-        // CN: 结合书面答案和语音转录
         let combinedAnswer = ''
         if (textAnswer && voiceAnswer) {
           combinedAnswer = `${textAnswer}\n\n[Voice Recording Transcript]: ${voiceAnswer}`
@@ -382,7 +330,6 @@ export default function TakeInterviewPage() {
           question_id: question.id,
           answer: combinedAnswer, // Correct field name according to API docs
           // Note: API docs don't include audio_url field, so we'll omit it for now
-          // CN: API文档中没有audio_url字段，所以暂时省略
         }
 
         console.log(`Submitting answer for question ${question.id}:`, answerData)
@@ -393,25 +340,21 @@ export default function TakeInterviewPage() {
       console.log(`Successfully submitted ${submittedCount} answers`)
 
       // Update applicant status to "Completed"
-      // CN: 更新候选人状态为"已完成"
       try {
         await updateApplicant(applicantId, { interview_status: 'Completed' })
         console.log('Successfully updated applicant status to Completed')
       } catch (updateErr) {
         console.error('Failed to update applicant status:', updateErr)
         // Don't block the flow, just log the error
-        // CN: 不要阻塞流程，只记录错误
       }
 
       // Redirect to completion page
-      // CN: 重定向到完成页面
       navigate(`/take/${applicantId}/complete`)
 
     } catch (err) {
       console.error('Failed to submit interview:', err)
       
       // More detailed error message
-      // CN: 更详细的错误消息
       let errorMessage = 'Failed to submit your answers. '
       if (err.message.includes('401')) {
         errorMessage += 'Authentication error. Please refresh the page and try again.'
@@ -430,7 +373,6 @@ export default function TakeInterviewPage() {
   }
 
   // Early return for loading state
-  // CN: 加载状态的早期返回
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -443,7 +385,6 @@ export default function TakeInterviewPage() {
   }
 
   // Early return for error state
-  // CN: 错误状态的早期返回
   if (error) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -462,7 +403,6 @@ export default function TakeInterviewPage() {
 
 
   // Get current question
-  // CN: 获取当前题目
   const currentQuestion = questions[currentQuestionIndex]
   const currentRecordingState = recordingStates[currentQuestion?.id] || {}
 

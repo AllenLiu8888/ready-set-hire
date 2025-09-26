@@ -21,48 +21,6 @@ Ready Set Hire is a full-stack interview management system designed to streamlin
 - **💾 Auto-save**: Real-time answer preservation
 - **✅ Progress Tracking**: Clear interview progress indicators
 
-## 🛠️ Tech Stack
-
-### Frontend
-
-- **React 19.1.1** - User interface framework
-- **React Router 7.0.1** - Routing management
-- **Tailwind CSS 4.1.13** - Styling framework
-- **Vite 7.1.7** - Build tool
-- **React Speech Recognition 4.0.1** - Speech recognition
-- **Headless UI 2.2.8** - Unstyled UI components
-- **Lucide React** - Icon library
-
-### Backend Integration
-
-- **RESTful API** - Backend service communication
-- **JWT Authentication** - Token-based authentication
-- **AI Service Integration** - AI question generation service
-
-## 📁 Project Structure
-
-```text
-ready-set-hire/
-├── src/
-│   ├── components/         # Reusable components
-│   │   ├── form/           # Form components
-│   │   ├── layout/         # Layout components
-│   │   ├── shared/         # Shared components
-│   │   └── ai/             # AI-related components
-│   ├── pages/              # Page components
-│   │   ├── applicants/     # Applicant management pages
-│   │   ├── interviews/     # Interview management pages
-│   │   ├── questions/      # Question management pages
-│   │   └── take-interview/ # Candidate interview pages
-│   ├── services/           # API service layer
-│   ├── utils/              # Utility functions
-│   ├── App.jsx             # Main application component
-│   └── main.jsx            # Application entry point
-├── public/                 # Static assets
-├── .env.local              # Environment configuration
-└── package.json            # Project dependencies
-```
-
 ## 🔧 Installation & Setup
 
 ### Prerequisites
@@ -111,6 +69,147 @@ npm run dev
 ```
 
 Visit `http://localhost:5173` to view the application
+
+## 📋 Usage Statement
+
+This project incorporates various technologies and tools across different categories:
+
+### Framework Usage
+- **TailwindCSS Plus Framework**: Similar to DaisyUI, used for consistent design system and component styling
+
+### Library Usage
+- **Lucide React**: Icon library providing consistent iconography across the application
+- **React Speech Recognition**: Voice recognition and transcription functionality for candidate interviews
+- **Tailwind Variants**: Managing different styles for various component states and variants
+- **Headless UI**: Accessible, unstyled UI components for complex interactions
+
+### AI Usage
+- **AI Model Integration**: The system connects to OpenAI LLM models, utilizing artificial intelligence services to automatically generate interview questions based on job roles and requirements
+- **Comment Writing Assistance**: Used Codex and Claude to assist in modifying and supplementing code comments, ensuring accurate and clear documentation
+- **Learning Assistance**: When encountering difficult concepts, leveraged AI tools for explanation and learning support
+- **Development Assistance**: Throughout the development process, utilized AI tools to assist with code documentation writing, debugging, and optimization work, providing significant help in selecting various libraries
+
+All AI-generated content is reviewed and can be edited by administrators before use in actual interviews.
+
+## ⚖️ Speech-to-Text in Hiring Interviews — Responsible AI & Accessibility
+
+### 1. Bias & Fairness
+
+**Potential Issues**
+- Accuracy varies with accents, dialects, and speech styles
+- Non-native speakers may face lower recognition accuracy
+
+**Possible Solutions**
+- Test regularly across diverse groups
+- Include varied language data in training
+- Do not rely solely on automatic transcription for evaluation
+
+### 2. Accessibility Needs
+
+**Potential Issues**
+- Candidates with speech impairments may be disadvantaged
+- Lack of alternative input methods
+- Insufficient feedback or response time
+
+**Possible Solutions**
+- Provide text input alternatives
+- Offer clear visual feedback
+- Allow adequate response time
+
+### 3. Privacy & Consent
+
+**Potential Issues**
+- Candidates unclear about data usage
+- Risk of data misuse or leaks
+
+**Possible Solutions**
+- Obtain explicit consent before recording
+- Set clear data retention and deletion policies
+- Offer an opt-out option without penalty
+
+### 4. Technical Reliability
+
+**Potential Issues**
+- Network instability or system errors
+- Lack of pre-interview testing
+
+**Possible Solutions**
+- Provide fallback mechanisms
+- Communicate technical requirements
+- Offer test environment and multiple attempts
+
+### 5. Legal Compliance
+
+**Potential Issues**
+- Risk of violating anti-discrimination or privacy laws
+
+**Possible Solutions**
+- Comply with ADA, GDPR, CCPA, etc.
+- Provide reasonable accommodations
+
+### 6. Quality Assurance
+
+**Potential Issues**
+- Errors in transcription may affect outcomes
+- Bias may go undetected over time
+
+**Possible Solutions**
+- Human review for critical decisions
+- Regular audits and bias monitoring
+- Candidate feedback mechanism
+
+### 7. Transparency & Communication
+
+**Potential Issues**
+- Candidates unclear about system's impact
+- Lack of usage guidance or support
+
+**Possible Solutions**
+- Explain role and limits of speech recognition
+- Provide best practice guidelines
+- Ensure technical support availability
+
+## 🛠️ Tech Stack
+
+### Frontend
+
+- **React 19.1.1** - User interface framework
+- **React Router 7.0.1** - Routing management
+- **Tailwind CSS 4.1.13** - Styling framework
+- **Vite 7.1.7** - Build tool
+- **React Speech Recognition 4.0.1** - Speech recognition
+- **Headless UI 2.2.8** - Unstyled UI components
+- **Lucide React** - Icon library
+
+### Backend Integration
+
+- **RESTful API** - Backend service communication
+- **JWT Authentication** - Token-based authentication
+- **AI Service Integration** - AI question generation service
+
+## 📁 Project Structure
+
+```text
+ready-set-hire/
+├── src/
+│   ├── components/         # Reusable components
+│   │   ├── form/           # Form components
+│   │   ├── layout/         # Layout components
+│   │   ├── shared/         # Shared components
+│   │   └── ai/             # AI-related components
+│   ├── pages/              # Page components
+│   │   ├── applicants/     # Applicant management pages
+│   │   ├── interviews/     # Interview management pages
+│   │   ├── questions/      # Question management pages
+│   │   └── take-interview/ # Candidate interview pages
+│   ├── services/           # API service layer
+│   ├── utils/              # Utility functions
+│   ├── App.jsx             # Main application component
+│   └── main.jsx            # Application entry point
+├── public/                 # Static assets
+├── .env.local              # Environment configuration
+└── package.json            # Project dependencies
+```
 
 ## 📜 Available Scripts
 
@@ -200,62 +299,6 @@ The application uses React's built-in state management:
 - `useCallback` - Performance optimization
 - Context API - Cross-component state sharing (when needed)
 
-## 🤖 AI Usage Statement
-
-This project incorporates AI technologies in the following ways:
-
-- **AI Question Generation**: The system can automatically generate interview questions based on job roles and requirements using AI services
-- **Speech-to-Text**: Utilizes browser-based speech recognition APIs to convert candidate voice responses into text
-- **Development Assistance**: AI tools were used to assist with code documentation, debugging, and optimization during development
-
-All AI-generated content is reviewed and can be edited by administrators before use in actual interviews.
-
-## ⚖️ Responsible AI & Accessibility Considerations
-
-### Speech-to-Text in Hiring Interviews - Key Considerations:
-
-#### Bias and Fairness
-- Speech recognition accuracy varies across accents, dialects, and speech patterns
-- Non-native speakers may experience lower recognition accuracy
-- Regional vocabulary and pronunciation differences can affect transcription quality
-- System should be regularly tested across diverse speaker demographics
-
-#### Accessibility Requirements
-- Provide alternative input methods (text typing) for all speech interfaces
-- Support for candidates with speech disabilities or impairments
-- Clear visual feedback during speech recognition process
-- Adequate time allowances for responses without penalties
-
-#### Privacy and Consent
-- Explicit consent required before recording voice data
-- Clear data retention and deletion policies
-- Transparency about how voice data is processed and stored
-- Option to opt-out of voice recording without disadvantage
-
-#### Technical Reliability
-- Fallback mechanisms for technical failures
-- Internet connectivity requirements clearly communicated
-- Testing environment provided before actual interview
-- Support for multiple attempts if recognition fails
-
-#### Legal Compliance
-- Adherence to disability discrimination laws (ADA, etc.)
-- Compliance with data protection regulations (GDPR, CCPA)
-- Equal opportunity employment requirements
-- Documentation of reasonable accommodations provided
-
-#### Quality Assurance
-- Human review of transcriptions for critical decisions
-- Regular auditing of system performance across demographics
-- Continuous monitoring for bias in outcomes
-- Feedback mechanism for candidates to report issues
-
-#### Transparency and Communication
-- Clear explanation of how speech recognition affects evaluation
-- Information about technology limitations upfront
-- Guidelines on optimal recording conditions
-- Support channels for technical assistance
-
 ## 📄 License
 
 This project is a COMP2140 course assignment project.
@@ -266,9 +309,6 @@ This project is a COMP2140 course assignment project.
 - Student ID: 47672626
 - Course: COMP2140
 
-## 📞 Support
-
-For issues, please contact the course teaching team.
 
 ---
 
