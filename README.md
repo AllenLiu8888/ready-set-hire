@@ -228,6 +228,89 @@ npm run preview
 npm run lint
 ```
 
+## 🤖 AI Question Generation
+
+### Overview
+
+Ready Set Hire features AI-powered interview question generation that automatically creates high-quality, role-specific interview questions using advanced language models.
+
+### 🌟 Features
+
+- **🤖 One-click question generation** - Generate questions with a single click
+- **🎯 Context-aware questions** - Tailored to job role and company
+- **📊 Multiple difficulty levels** - Easy (2-3), Intermediate (4-5), Advanced (1-2)
+- **🔄 Automatic database integration** - Questions automatically saved
+- **🛡️ Fallback questions** - Backup questions if AI fails
+- **⚙️ Multiple AI provider support** - OpenAI, Azure, Ollama, and more
+
+### 🔧 Setup Configuration
+
+#### 1. Environment Variables
+
+Add these variables to your `.env.local` file:
+
+```env
+# Required for AI functionality
+VITE_AI_API_KEY=your_openai_api_key_here
+VITE_AI_API_ENDPOINT=https://api.openai.com/v1/chat/completions
+VITE_AI_API_MODEL=gpt-3.5-turbo
+```
+
+#### 2. Get OpenAI API Key
+
+1. Visit [OpenAI API Keys](https://platform.openai.com/api-keys)
+2. Create a new API key
+3. Copy the key to your `.env.local` file
+4. Restart your development server: `npm run dev`
+
+### 🔌 Supported AI Providers
+
+#### OpenAI (Recommended)
+```env
+VITE_AI_API_KEY=sk-your-openai-key
+VITE_AI_API_ENDPOINT=https://api.openai.com/v1/chat/completions
+VITE_AI_API_MODEL=gpt-3.5-turbo
+```
+
+
+### 📖 How to Use
+
+1. **Navigate to Interviews page**
+2. **Click "Generate Questions"** button next to any interview
+3. **Wait for generation** - AI creates 8 high-quality questions
+4. **Automatic integration** - Questions are saved to database
+
+### 🎛️ Customization
+
+#### Custom Prompts
+
+To modify AI prompts, edit `src/services/aiQuestionService.js`:
+
+```javascript
+function createPrompt(interviewData, questionCount) {
+  // Customize the prompt here for different question styles
+  // Modify role requirements, difficulty distribution, etc.
+}
+```
+
+#### Custom Question Processing
+
+To modify question processing, edit the `parseAIResponse` function:
+
+```javascript
+function parseAIResponse(response) {
+  // Add custom validation/processing
+  // Filter questions, adjust difficulty levels, etc.
+}
+```
+
+### 🛡️ Fallback Behavior
+
+If AI generation fails, the system provides:
+- 8 high-quality fallback questions
+- Mixed difficulty levels
+- Professional questions suitable for any role
+
 ## 🎯 Core Modules
 
 ### 1. Interview Management
@@ -313,10 +396,4 @@ This project is a COMP2140 course assignment project.
 
 ---
 
-*Last Updated: 2025-09-26*
-
-
-TDDO:
-1. takeinterview部分所有代码
-2. AI生成部分所有代码
-3. 
+*Last Updated: 2025-09-26* 
