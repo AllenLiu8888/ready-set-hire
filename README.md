@@ -91,7 +91,8 @@ This project incorporates various technologies and tools across different catego
 
 All AI-generated content is reviewed by administrators.
 
-## ⚖️ Speech-to-Text in Hiring Interviews — Responsible AI & Accessibility (Rubric 5.1 Research Question)
+## ⚖️ Speech-to-Text in Hiring Interviews 
+Responsible AI & Accessibility (Rubric 5.1 Research Question)
 
 ### 1. Bias & Fairness
 
